@@ -1,0 +1,13 @@
+__pycache__/
+db.sqlite3
+*.py[cod]
+*.pyo
+.venv/
+.env
+*.pem
+.idea/
+*.swp
+*.swo
+*.log
+/media/
+/staticfiles/

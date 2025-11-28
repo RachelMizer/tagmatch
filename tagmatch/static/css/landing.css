@@ -1,0 +1,27 @@
+.hero{
+    width: 100%;
+    padding-top: 50px;
+    padding-left: 25px;
+    background-image: linear-gradient(to top, #7b367f, #7b3e83, #7b4587, #7b4c8a, #7b538d);
+}
+
+.hero h2 {
+    margin-left: 100px;
+    color: white;
+    font-size: 1.1em;
+    text-transform: uppercase;
+    letter-spacing: .5rem;
+    text-align: center;
+    width: 350px;
+}
+
+
+.couple {
+    width: 100%;
+}
+
+.couple img{
+    width: 100%;
+    max-width: 1000px;
+    margin-left: 25%;
+}
