@@ -1,0 +1,58 @@
+<!-- tagmatch > sitemap -->
+
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="dev-cont">
+
+    <h1 class="pagetitle">Site Map</h1>
+    <p style="font-size: 1.2rem; color: #666;">Overview of all major pages in TagMatch</p>
+
+    <hr>
+
+    <h2 class="pagesub TT" style="margin-bottom: 8px;">Public Pages</h2>
+    <ul>
+        <li><a href="/">Landing Page</a></li>
+        <li><a href="/landing/">Landing (Alt)</a></li>
+        <li><a href="/register/">Register</a></li>
+        <li><a href="/login/">Login</a></li>
+    </ul>
+
+    <h2 class="pagesub TT" style="margin-top: 8px; margin-bottom: 8px;">User Profile and Dashboard</h2>
+    <ul>
+        <li><a href="/home/">Home Dashboard</a></li>
+        <li><a href="/profile/">My Profile</a></li>
+        <li><a href="/messages/">Messages</a></li>
+        <li><a href="/matches/">Matches</a></li>
+        <li><a href="/search/">Search (Tag-Based)</a></li>
+    </ul>
+
+    <h2 class="pagesub TT" style="margin-top: 8px; margin-bottom: 8px;">Gallery</h2>
+    <ul>
+        <li><a href="/gallery/">Gallery Home</a></li>
+        <li><a href="/gallery/upload/">Upload Image</a></li>
+    </ul>
+
+    <h2 class="pagesub TT" style="margin-top: 8px; margin-bottom: 8px;">Developer Pages</h2>
+    <ul>
+        <li><a href="/devnotes/">Developer Notes</a></li>
+        <li><a href="/sitemap/">Sitemap</a></li>
+        {% if user.is_staff %}
+            <li><a href="/admin/">Admin Panel</a></li>
+        {% endif %}
+    </ul>
+
+    <h2 class="pagesub TT" style="margin-top: 8px; margin-bottom: 8px;">Authentication & Account</h2>
+    <ul>
+        <li><a href="/logout/">Logout</a></li>
+        <li><a href="/password-reset/">Password Reset</a></li>
+        <li><a href="/password-reset/done/">Password Reset Sent</a></li>
+        <li><a href="/reset/done/">Password Reset Complete</a></li>
+    </ul>
+
+</div>
+
+{% endblock %}

@@ -3,18 +3,46 @@
 {% load static %}
 <html>
 <head>
-    <title>TagMatch | You pick the tag, we find the match.</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}?v=5">
-    <link rel="stylesheet" href="{% static 'css/landing.css' %}?v=5">
-
+        <title>TagMatch | You pick the tag, we find the match.</title>
+        <link rel="stylesheet" href="{% static 'css/landing.css' %}?v=5">
+        <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
 </head>
 <body>
     <div class="hero">
-        <img src="{% static 'img/logo.png' %}" alt="logo">
-        <h2>You pick the tag,<br />we find the match.</h2>
-        <div class="couple">
-        <img src="{% static 'img/couple.png' %}" alt="couple">
-        </div>
+        <div class="header">
+
+            <div class="logo">
+            <img src="{% static 'img/logo.png' %}" alt="logo">
+            <h2>You pick the tag,<br />we find the match.</h2>
+            </div>
+
+            <div class="navland">
+            <div class="bounce"><p>Try for free!</p></div>
+            <div class="navbuttons">
+            <div class="btn"><a href="{% url 'login' %}">Login</a></div><div class="btn"><a href="{% url 'register' %}">Sign Up</a></div>
+            </div>
+            </div>
+        
+        </div> <!-- header close -->
+
+            <div class="couple">
+                <div class="subtitle">Who will<p class="emph">you</p>match with?</div>
+                <img src="{% static 'img/couple.png' %}" alt="couple">
+            </div>
+
+    </div> <!-- hero close -->
+
+    <div class="under">
+    <h2>How it works</h2>
+    <div class="subunder">
+        <div class="inst"><p>Sign up for free</p></div>
+        <div class="arrow"><img src="{% static 'img/arrow.png' %}" alt="arrow"></div>
+        <div class="inst"><p>Fill out your<br />profile</p></div>
+        <div class="arrow"><img src="{% static 'img/arrow.png' %}" alt="arrow"></div>
+        <div class="inst"><p>Choose your tags</p></div>
+        <div class="arrow"><img src="{% static 'img/arrow.png' %}" alt="arrow"></div>
+        <div class="inst"><p>View your matches!</p></div>
+    </div>
     </div>
 </body>
 </html>

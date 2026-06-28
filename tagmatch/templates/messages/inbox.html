@@ -1,0 +1,73 @@
+<!-- templates/messages/inbox -->
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="mess-cont">
+    <h1 class="pagetitle">Messages</h1>
+
+    <h3>Options</h3>
+    <div class="inbox-menu">
+        <button><a href="{% url 'messages:compose' %}">+ New Message</a></button>
+    </div>
+
+
+    {% if messages %}
+        {% for message in messages %}
+        <div class="thread">
+                <div class="msgheader">
+
+                    {% if not message.read %}
+                        <span class="badge">Unread</span>
+                    {% endif %}
+
+                    <div class="sender">
+                        <div class="icocont">
+                            {% if message.sender.profile.image %}
+                                <img src="{{ message.sender.profile.image.url }}" alt="Profile pic">
+                            {% else %}
+                                <img src="{% static 'img/default-profile.png' %}" alt="Default pic">
+                            {% endif %}
+                        </div>
+
+                        <div class="sendertag">
+                            <a href="{% url 'profile' message.sender.username %}">
+                                {{ message.sender.username }}
+                            </a>
+                        </div>
+
+                        <p class="timestamp">
+                            SENT {{ message.sent_at|date:"M d, H:i" }}
+                        </p>
+                    </div>
+
+                </div>
+
+                    <div class="msgbody">
+                        <p class="subject">
+                            SUBJECT: {{ message.subject|default:"(No subject)" }}
+                        </p>
+
+                        <div class="message">
+                            <p>{{ message.body|truncatechars:100 }}</p>
+                        </div>
+
+                        <br />
+
+                        <!-- link to conversation -->
+                        <a href="{% url 'messages:conversation' message.sender.username %}"
+                           class="msgmore {% if not message.read %}unread{% endif %}">
+                            View Conversation >>
+                        </a>
+                    </div>
+
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No messages yet.</p>
+            {% endif %}
+    </div>
+</div>
+{% endblock content %}
+

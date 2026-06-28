@@ -1,20 +1,118 @@
-<!-- templates/ -->
+<!-- templates/register -->
+
 {% extends "base.html" %}
 
-{% load static %}
-
 {% block content %}
-
+<br /><br />
 <div class="logbox">
-<h1>Login</h1>
-<form>
-    <label for="UN">Email:</label>
-    <input id="UN" name="UN">
-    <label for="PW">Create a Password:</label>
-    <input id="PW" name="PW">
-    <label for="PW">Reenter Password:</label>
-    <input id="PW" name="PW">
-</form>
+  <h1>Create Your Account</h1>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- User Info Section -->
+    <h2>User Information</h2>
+
+    <div class="wrapper">
+      <label>{{ form.first_name.label_tag }}</label>
+      {{ form.first_name }}
+    </div>
+
+    <div class="wrapper">
+      <label>{{ form.last_name.label_tag }}</label>
+      {{ form.last_name }}
+    </div>
+
+    <div class="wrapper">
+      <label>{{ form.username.label_tag }}</label>
+      {{ form.username }}
+    </div>
+
+    <div class="wrapper">
+      <label>{{ form.email.label_tag }}</label>
+      {{ form.email }}
+    </div>
+
+    <div class="wrapper">
+      <label>{{ form.password.label_tag }}</label>
+      {{ form.password }}
+    </div>
+
+    <div class="wrapper">
+      <label>{{ form.confirm_password.label_tag }}</label>
+      {{ form.confirm_password }}
+    </div>
+
+    <br />
+
+    <!-- Profile Info Section -->
+    <h2>Complete Your Profile</h2>
+
+    <div class="wrapper">
+      <label>{{ form.location.label_tag }}</label>
+      {{ form.location }}
+    </div>
+
+    <div class="wrapper">
+      <label>{{ form.gender_identity.label_tag }}</label>
+      {{ form.gender_identity }}
+    </div>
+
+    <div class="wrapper">
+      <label>{{ form.sexuality.label_tag }}</label>
+      {{ form.sexuality }}
+    </div>
+
+    <div class="wrapper">
+      <label>{{ form.date_of_birth.label_tag }}</label>
+      {{ form.date_of_birth }}
+    </div>
+
+    <!-- ✅ Updated Height Fields -->
+    <div class="wrapper">
+      <label>Height</label>
+      <div class="wrapper2">
+        {{ form.height_feet }} <span>ft</span>
+        {{ form.height_inches }} <span>in</span>
+      </div>
+    </div>
+
+    <div class="wrapper">
+      <label>{{ form.build.label_tag }}</label>
+      {{ form.build }}
+    </div>
+
+    <!-- ✅ Updated Relationship Types -->
+    <div class="wrapper">
+      <label>{{ form.relationship_types_seeking.label_tag }}</label>
+      <div class="wrapper2">
+        {{ form.relationship_types_seeking }}
+      </div>
+    </div>
+
+    <br />
+
+    <div class="wrapper">
+      <label for="children_status">Number of Children:</label>
+      <p class="sub">If you have none, enter 0.</p>
+      {{ form.children_status }}
+    </div>
+
+    <br />
+
+    <h3>Upload a Profile Picture:</h3>
+    <p class="sub">Enhance your profile with a picture.</p>
+    {{ form.profile_image }}
+
+    <br /><br />
+
+    <button type="submit" class="btn">Submit</button>
+
+    {% if form.errors %}
+      <div class="errors">
+        {{ form.errors }}
+      </div>
+    {% endif %}
+  </form>
 </div>
- 
-{% endblock content %}
+{% endblock %}

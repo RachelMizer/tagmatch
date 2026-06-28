@@ -1,0 +1,103 @@
+<!-- templates / profile_view -->
+
+<!-- This page is for viewing other users' profiles -->
+
+<!-- templates / profiles/profile_view.html -->
+
+{% extends "base.html" %}
+{% load static %}
+{% load profile_extras %}
+
+{% block content %}
+
+<div class="prof-cont">
+
+    <!-- Basic Info -->
+    <h2 class="pagetitle">{{ profile.user.first_name }}'s Profile</h2>
+
+    <p>
+        <a class="editprof" href="{% url 'messages:compose' %}?to={{ profile.user.username }}">
+            Send {{ profile.user.username }} a Message
+        </a><br />
+
+        <a class="editprof" href="{% url 'gallery_view' profile.user.username %}">
+            View {{ profile.user.username }}'s Gallery
+        </a>
+    </p>
+
+    {% if profile.image %}
+        <div class="profpic-wrap">
+            <img src="{{ profile.image.url }}" alt="{{ profile.user.username }}'s Profile Picture">
+        </div>
+    {% else %}
+        <div class="profpic-wrap">
+            <img src="{% static 'img/default-profile.png' %}" alt="Default Profile Picture">
+        </div>
+    {% endif %}
+
+    <br />
+
+    <table>
+        <tr>
+            <td>Username</td>
+            <td>{{ profile.user.username }}</td>
+        </tr>
+        <tr>
+            <td>Location</td>
+            <td>{{ profile.location }}</td>
+        </tr>
+        <tr>
+            <td>Gender Identity</td>
+            <td>{{ profile.gender_identity }}</td>
+        </tr>
+        <tr>
+            <td>Sexuality</td>
+            <td>{{ profile.sexuality }}</td>
+        </tr>
+        <tr>
+            <td>Date of Birth</td>
+            <td>{{ profile.date_of_birth }}</td>
+        </tr>
+        <tr>
+            <td>Height</td>
+            <td>{{ profile.height_feet }}' {{ profile.height_inches }}"</td>
+        </tr>
+        <tr>
+            <td>Build</td>
+            <td>{{ profile.build }}</td>
+        </tr>
+
+        <tr>
+            <td>Relationship Types Seeking</td>
+            <td class="rel-opts">
+                {% for code in profile.relationship_types_seeking %}
+                    {{ relationship_labels|get_item:code }}<br />
+                {% endfor %}
+                <br />
+            </td>
+        </tr>
+
+        <tr>
+            <td>Children</td>
+            <td>{{ profile.children_status }}</td>
+        </tr>
+    </table>
+
+    <br />
+
+    <!-- Tag Cloud -->
+    <h2>{{ profile.user.first_name }}'s Tags</h2>
+
+    {% if profile.interests %}
+        {% for tag in profile.interests|split:"," %}
+            <span>{{ tag }}</span>
+        {% endfor %}
+    {% else %}
+        <p>This user hasn't added any tags yet.</p>
+    {% endif %}
+
+</div>
+
+{% endblock %}
+
+

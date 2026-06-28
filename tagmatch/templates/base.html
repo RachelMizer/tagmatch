@@ -6,23 +6,68 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>TagMatch</title>
+    <title>TagMatch | You pick the tag, we find the match.</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}?v=2">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
     <div class="header">
-    <h1>TagMatch</h1>
-    <h2>You pick the tag, we find the match.</h2>
+        <div class="logo">
+        <img src="{% static 'img/logo.png' %}" alt="logo">
+        <h2>You pick the tag, we find the match.</h2>
+        </div>
     </div>
-    <nav>
-        <a href="{% url 'register' %}">Register</a> |
-        <a href="/admin/">Admin</a>
-    </nav>
 
-{% block content %}
- 
-{% endblock content %}
+<nav>
 
+    {% if user.is_authenticated %}
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'my_profile' %}">Profile</a>
+        <a href="{% url 'gallery' %}">Gallery</a>
+        <a href="{% url 'matches' %}">Your Matches</a>
+        <a href="{% url 'search' %}">Search</a>
+        <a href="{% url 'messages:inbox' %}">Messages ({{ unread_message_count|default:0 }})</a>
+
+
+        <div class="icocont">
+            {% if user.profile.image %}
+                <img src="{{ user.profile.image.url }}" alt="Profile Picture">
+            {% else %}
+                <img src="{% static 'img/acc_ico.png' %}" alt="Default Icon">
+            {% endif %}
+        </div>
+
+        <h2>Welcome, {{ user.first_name|default:user.username }}!</h2>
+
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button class="btn" type="submit">Logout</button>
+        </form>
+
+    {% else %}
+        <div class="icocont">
+            <img src="{% static 'img/default-profile.png' %}" alt="Default Icon">
+        </div>
+
+        <h2>Welcome! If you don't have an account yet, sign up!</h2>
+
+        {% if request.resolver_match.url_name != 'login' %}
+            <button><a href="{% url 'login' %}">Login</a></button>
+        {% endif %}
+
+        {% if request.resolver_match.url_name != 'register' %}
+            <button><a href="{% url 'register' %}">Sign Up</a></button>
+        {% endif %}
+    {% endif %}
+
+</nav>
+<div class="main">
+    {% block content %}
+    {% endblock content %}
+</div>
+    <div class="footer">
+        | <a href="{% url 'devnotes' %}">Developer Notes</a> | <a href="{% url 'sitemap' %}">Site Map </a> | <a href="/admin/">Admin</a> |</p>
     </div>
 </body>
 </html>
+

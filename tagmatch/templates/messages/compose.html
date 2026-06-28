@@ -1,0 +1,35 @@
+<!-- messages / compose -->
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="mess-cont">
+    <h1 class="pagetitle">Compose Message</h1>
+    <p class="tinysub">Send a new message to another user</p>
+
+    <form method="POST" class="compose-form">
+        {% csrf_token %}
+
+        <div class="form-row">
+            <label for="id_recipient">To:</label>
+            {{ form.recipient }}
+        </div>
+
+        <div class="form-row">
+            <label for="id_subject">Subject:</label>
+            {{ form.subject }}
+        </div>
+
+        <div class="form-row">
+            <label for="id_body">Message:</label>
+            {{ form.body }}
+        </div>
+
+        <button type="submit" class="send-btn">Send Message</button>
+    </form>
+
+    <a href="{% url 'messages:inbox' %}" class="backlink">← Back to Inbox</a>
+</div>
+
+{% endblock content %}

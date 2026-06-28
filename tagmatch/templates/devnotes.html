@@ -1,0 +1,35 @@
+<!-- templates / devnotes -->
+
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="dev-cont">
+<h2 class="pagetitle">Requirements & Dependencies</h2>
+<ul>
+    <li><strong>Python:</strong> 3.10+ recommended</li>
+    <li><strong>Django:</strong> 5.x</li>
+    <li><strong>django-taggit:</strong> For tag management</li>
+    <li><strong>Pillow:</strong> For image handling (profile photos, gallery)</li>
+    <li><strong>SQLite:</strong> Default dev database (PostgreSQL recommended for production)</li>
+    <li><strong>Bootstrap (optional):</strong> Used lightly for layout and forms</li>
+    <li><strong>django-crispy-forms (optional):</strong> If you choose to use it for form rendering</li>
+</ul>
+<br />
+<h3 class="pagesub">Local Development Requirements</h3>
+<ul>
+    <li>Virtual environment (venv)</li>
+    <li>Environment variables for secret key & debug settings</li>
+    <li>Static files collected via <code>python manage.py collectstatic</code></li>
+</ul>
+<br />
+<h3 class="pagesub">Recommended Tools</h3>
+<ul>
+    <li>VS Code</li>
+    <li>Git for version control</li>
+</ul>
+
+</div>
+{% endblock %}

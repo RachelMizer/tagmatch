@@ -1,0 +1,94 @@
+<!-- templates/profile -->
+
+{% extends "base.html" %}
+
+{% load static %}
+
+{% load profile_extras %}
+
+{% block content %}
+
+<div class="prof-cont">
+
+    <!-- Basic Info -->
+    <h2 class="pagetitle">Your Profile</h2>
+    <p><a class="editprof" href="{% url 'edit_profile' %}">Edit Profile</a><br />
+    <a class="editprof" href="{% url 'gallery' %}">View Your Gallery</a></p>
+
+    <!-- Profile Image -->
+    {% if user.profile.image %}
+        <div class="profpic-wrap">
+            <img src="{{ user.profile.image.url }}" alt="Profile Picture">
+        </div>
+    {% else %}
+        <div class="profpic-wrap">
+            <img src="{% static 'img/default-profile.png' %}" alt="Default Profile Picture">
+        </div>
+    {% endif %}
+
+    <br />
+
+    <table>
+        <tr>
+            <td>Username</td>
+            <td>{{ user.username }}</td>
+        </tr>
+        <tr>
+            <td>Location</td>
+            <td>{{ user.profile.location }}</td>
+        </tr>
+        <tr>
+            <td>Gender Identity</td>
+            <td>{{ user.profile.gender_identity }}</td>
+        </tr>
+        <tr>
+            <td>Sexuality</td>
+            <td>{{ user.profile.sexuality }}</td>
+        </tr>
+        <tr>
+            <td>Date of Birth</td>
+            <td>{{ user.profile.date_of_birth }}</td>
+        </tr>
+        <tr>
+            <td>Height</td>
+            <td>{{ user.profile.height_feet }}' {{ user.profile.height_inches }}"</td>
+        </tr>
+        <tr>
+            <td>Build</td>
+            <td>{{ user.profile.build }}</td>
+        </tr>
+    
+        <tr >
+            <td>Relationship Types Seeking</td>
+            <td class="rel-opts">
+                {% for code in user.profile.relationship_types_seeking %}
+                {{ relationship_labels|get_item:code }}<br />{% if not forloop.last %} {% endif %}
+                {% endfor %}
+                <br />
+            </td>
+        </tr>
+
+        <tr>
+            <td>Children</td>
+            <td>{{ user.profile.children_status }}</td>
+        </tr>
+    </table>
+
+    <br />
+
+    <!-- Chosen Tag Cloud -->
+    <div class="tag-cloud">
+        <h3 class="pagetitle">Your Tags</h3>
+        <div class="tags">
+            {% for tag in user_tags %}
+                <span class="tag selected">{{ tag.name }}</span>
+            {% empty %}
+                <p>No tags selected yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}

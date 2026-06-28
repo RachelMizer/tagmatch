@@ -1,0 +1,65 @@
+<!-- templates/matches -->
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<h1 class="pagetitle">Your Matches</h1>
+
+<div class="matches-list">
+    {% for match in matches %}
+        <div class="match-card">
+
+            <div class="match-header">
+
+                <div class="icocontnav">
+                    <a href="{% url 'profile' match.username %}">
+                        {% if match.profile.image %}
+                            <img src="{{ match.profile.image.url }}" alt="{{ match.username }}">
+                        {% else %}
+                            <img src="{% static 'img/default-profile.png' %}" alt="Default">
+                        {% endif %}
+                    </a>
+                </div>
+
+                <h2>{{ match.username }}</h2>
+
+                <p class="match-score">
+                    {{ match.shared_count }} tag{{ match.shared_count|pluralize }} in common
+                </p>
+
+            </div>
+
+            {% if match.shared_count > 0 %}
+                <div class="tags">
+                    {% for tag in match.shared_tags %}
+                        <span class="tag">{{ tag.name }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="no-match">You don't have any matches yet!</p>
+            {% endif %}
+
+            <a class="view-profile TT" href="{% url 'profile' match.username %}">
+                View Profile
+            </a>
+
+        </div>
+    {% endfor %}
+</div>
+
+{% if page_obj.paginator.num_pages > 1 %}
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">&laquo; Prev</a>
+    {% endif %}
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Next &raquo;</a>
+    {% endif %}
+</div>
+{% endif %}
+
+{% endblock %}
+
+

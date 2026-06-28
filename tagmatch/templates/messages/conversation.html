@@ -1,0 +1,96 @@
+<!-- messaages/conversation view-->
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="conversation-container">
+
+    <h2 class="pagetitle">Conversation with {{ other_user.first_name }}</h2>
+
+    <div class="backlink">
+        <a href="{% url 'messages:inbox' %}">&larr; Back to Inbox</a>
+    </div>
+
+    <!-- that thread -->
+    <div class="chat-thread" id="thread">
+        {% if thread %}
+            {% for msg in thread %}
+                <div class="message-row {% if msg.sender == request.user %}sent{% else %}received{% endif %}">
+
+                    <!-- avatar -->
+                    <div class="icocont avatar">
+                        {% if msg.sender.profile.image %}
+                            <img src="{{ msg.sender.profile.image.url }}" alt="Avatar">
+                        {% else %}
+                            <img src="{% static 'img/default-profile.png' %}" alt="Avatar">
+                        {% endif %}
+                    </div>
+
+                    <!-- bubble -->
+                    <div class="bubble">
+                        <p>{{ msg.body }}</p>
+
+                        <span class="chat-timestamp">
+                            {{ msg.sent_at|date:"M d, H:i" }}
+                        </span>
+
+                        <!-- delete link (sender only) -->
+                        {% if msg.sender == request.user %}
+                            <a href="{% url 'messages:delete' msg.id %}"
+                               class="delete-msg"
+                               onclick="return confirm('Delete this message?');">
+                               Delete
+                            </a>
+                        {% endif %}
+                    </div>
+
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="empty-thread">No messages yet. Start the conversation below.</p>
+        {% endif %}
+    </div>
+
+    <!-- a\reply box -->
+    <div class="reply-box">
+        <form method="post" id="reply-form">
+            {% csrf_token %}
+            {{ form.body }}
+            <button type="submit">Send</button>
+        </form>
+    </div>
+
+    <!-- Typing indicator -->
+    <div id="typing-indicator" class="typing-indicator" style="display:none;">
+        <br />
+        {{ other_user.first_name }} is typing…
+    </div>
+
+</div>
+
+<!-- auto-scroll + typing indicator -->
+<script>
+    // auto-scroll to bottom
+    const thread = document.getElementById('thread');
+    if (thread) {
+        thread.scrollTop = thread.scrollHeight;
+    }
+
+    // typing indicator
+    const textarea = document.querySelector('textarea');
+    const indicator = document.getElementById('typing-indicator');
+
+    if (textarea) {
+        textarea.addEventListener('input', () => {
+            indicator.style.display = 'block';
+            clearTimeout(window.typingTimeout);
+            window.typingTimeout = setTimeout(() => {
+                indicator.style.display = 'none';
+            }, 1500);
+        });
+    }
+</script>
+
+{% endblock %}

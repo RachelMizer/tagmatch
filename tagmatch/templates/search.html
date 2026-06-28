@@ -1,0 +1,75 @@
+<!-- templates/search -->
+
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+<h1 class="pagetitle">Search Users by Tags</h1>
+
+<div class="search-container">
+
+    <!-- Sidebar -->
+    <aside class="search-sidebar">
+        <form method="get">
+            <h3 class="TT">Filter by Tag(s)</h3>
+
+            <div class="tag-checkboxes">
+                {% for tag in all_tags %}
+                    <label class="checkbox-item">
+                        <input type="checkbox"
+                               name="tags"
+                               value="{{ tag.id }}"
+                               {% if tag.id in selected_tag_ids %}checked{% endif %}>
+                        {{ tag.name }}
+                    </label>
+                {% endfor %}
+            </div>
+            <br />
+            <button type="submit" class="apply-btn">Apply Filters</button>
+            <button type="submit" class="apply-btn"><a href="{% url 'search' %}" class="clear-btn">Clear Filters</a></button>
+
+        </form>
+    </aside>
+
+    <!-- Results -->
+    <section class="search-results">
+        {% if users %}
+            {% for user in users %}
+                <div class="result-card">
+                    <a href="{% url 'profile' user.username %}">
+                        {% if user.profile.image %}
+                            <img src="{{ user.profile.image.url }}" alt="{{ user.username }}">
+                        {% else %}
+                            <img src="{% static 'img/default-profile.png' %}" alt="Default">
+                        {% endif %}
+                    </a>
+
+                    <h2>{{ user.username }}</h2>
+
+                    <div class="user-tags">
+                        {% for tag in user.profile.tags.all %}
+                            <span class="tag">{{ tag.name }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No users found with those tags.</p>
+        {% endif %}
+
+        {% if page_obj.paginator.num_pages > 1 %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?{% for tag_id in selected_tag_ids %}tags={{ tag_id }}&{% endfor %}page={{ page_obj.previous_page_number }}">&laquo; Prev</a>
+            {% endif %}
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a href="?{% for tag_id in selected_tag_ids %}tags={{ tag_id }}&{% endfor %}page={{ page_obj.next_page_number }}">Next &raquo;</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </section>
+
+</div>
+{% endblock %}

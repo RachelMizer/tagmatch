@@ -1,0 +1,33 @@
+<!-- templates/profiles/gallery_view -->
+ 
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="gall-cont">
+
+    <h1 class="pagetitle">{{ user.first_name }}'s Gallery</h1>
+    <br />
+
+    <p class="tinysub gallsub">Click thumbnails to view</p>
+
+    <div class="thumb-cont">
+        {% if images %}
+            {% for image in images %}
+                <div class="indv">
+                    <a href="{{ image.file.url }}" target="_blank" rel="noopener noreferrer">
+                        <img src="{{ image.file.url }}" alt="Gallery Image" width="200">
+                    </a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No images uploaded yet.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}
+
+
