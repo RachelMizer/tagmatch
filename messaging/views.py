@@ -45,12 +45,16 @@ def compose(request):
             msg.sender = request.user
             msg.sent_at = timezone.now()
             msg.save()
-
-            # Redirect directly to the conversation thread
             return redirect("messages:conversation", username=msg.recipient.username)
-
     else:
-        form = ComposeForm()
+        initial = {}
+        to_username = request.GET.get("to")
+        if to_username:
+            try:
+                initial["recipient"] = User.objects.get(username=to_username)
+            except User.DoesNotExist:
+                pass
+        form = ComposeForm(initial=initial)
 
     return render(request, "messages/compose.html", {
         "form": form

@@ -170,9 +170,14 @@ def search_view(request):
     paginator = Paginator(users_qs, 20)
     page_obj = paginator.get_page(request.GET.get("page"))
 
+    try:
+        selected_tag_ids_int = list(map(int, selected_tag_ids))
+    except (ValueError, TypeError):
+        selected_tag_ids_int = []
+
     return render(request, "search.html", {
         "all_tags": all_tags,
-        "selected_tag_ids": list(map(int, selected_tag_ids)),
+        "selected_tag_ids": selected_tag_ids_int,
         "users": page_obj,
         "page_obj": page_obj,
     })
