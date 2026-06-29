@@ -15,4 +15,6 @@ urlpatterns = [
     path("unblock/<str:username>/", views.unblock_user, name="unblock_user"),
     path("report/<str:username>/", views.report_user, name="report_user"),
     path("blocked-reported/", views.blocked_reported, name="blocked_reported"),
+    path("verify-email/<str:token>/", views.verify_email, name="verify_email"),
+    path("resend-verification/", views.resend_verification, name="resend_verification"),
 ]

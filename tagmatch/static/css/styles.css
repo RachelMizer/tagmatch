@@ -1319,3 +1319,18 @@ textarea,
     font-weight: bold;
     color: #5f3db3;
 }
+
+.verify-banner {
+    background: #fff3cd;
+    border-bottom: 1px solid #ffc107;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #5a4000;
+}
+
+.verify-banner a {
+    margin-left: 10px;
+    font-weight: bold;
+    color: #5f3db3;
+}

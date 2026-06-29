@@ -63,9 +63,20 @@ def home(request):
         .distinct()[:5]
     )
 
-    latest_messages = Message.objects.filter(
-        recipient=user
-    ).order_by('-sent_at')[:5]
+    all_msgs = Message.objects.filter(
+        Q(sender=user) | Q(recipient=user)
+    ).order_by('-sent_at').select_related('sender', 'recipient')
+
+    seen_partners = set()
+    latest_messages = []
+    for msg in all_msgs:
+        partner = msg.recipient if msg.sender == user else msg.sender
+        if partner.id not in seen_partners:
+            seen_partners.add(partner.id)
+            msg.partner = partner
+            latest_messages.append(msg)
+        if len(latest_messages) == 5:
+            break
 
     one_week_ago = timezone.now() - timedelta(days=7)
     new_members = User.objects.filter(
@@ -176,3 +187,11 @@ def devnotes(request):
 
 def sitemap(request):
     return render(request, "sitemap.html")
+
+
+def tos(request):
+    return render(request, "tos.html")
+
+
+def privacy(request):
+    return render(request, "privacy.html")

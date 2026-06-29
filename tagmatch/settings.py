@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     # Local apps
     'profiles',                     # user profiles, images, tags
     'messaging',                    # optional messaging system
-    'matches',                      # compatibility scoring & match logic
+    # 'matches',                    # removed — unused; tag-overlap matching lives in tagmatch/views.py
     'gallery',                      # image uploads & management
 ]
 

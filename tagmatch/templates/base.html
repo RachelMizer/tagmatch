@@ -66,8 +66,15 @@
     {% block content %}
     {% endblock content %}
 </div>
+    {% if user.is_authenticated and not user.profile.email_verified %}
+    <div class="verify-banner">
+        Your email address is not verified.
+        <a href="{% url 'resend_verification' %}">Resend verification email</a>
+    </div>
+    {% endif %}
+
     <div class="footer">
-        | <a href="{% url 'devnotes' %}">Developer Notes</a> | <a href="{% url 'sitemap' %}">Site Map </a> | <a href="/admin/">Admin</a> |</p>
+        | <a href="{% url 'devnotes' %}">Developer Notes</a> | <a href="{% url 'sitemap' %}">Site Map</a> | <a href="{% url 'tos' %}">Terms of Service</a> | <a href="{% url 'privacy' %}">Privacy Policy</a> | <a href="/admin/">Admin</a> |
     </div>
 </body>
 </html>

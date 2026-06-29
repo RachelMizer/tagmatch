@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="prof-cont">
+    {% if success %}
+        <h2 class="pagetitle">Email Verified!</h2>
+        <p>Your email address has been verified. Thank you!</p>
+        <br />
+        <a href="{% url 'home' %}">Go to Home</a>
+    {% else %}
+        <h2 class="pagetitle">Verification Failed</h2>
+        <p>This verification link is invalid or has expired (links expire after 24 hours).</p>
+        {% if user.is_authenticated %}
+            <p><a href="{% url 'resend_verification' %}">Send a new verification email</a></p>
+        {% else %}
+            <p><a href="{% url 'login' %}">Log in</a> to request a new verification email.</p>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

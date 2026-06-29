@@ -106,6 +106,19 @@
 
     <br /><br />
 
+    <div class="wrapper">
+      <label>{{ form.date_of_birth.help_text }}</label>
+    </div>
+
+    <div class="wrapper" style="margin-top: 16px;">
+      {{ form.agree_to_tos }}
+      <label for="id_agree_to_tos" style="display:inline; margin-left: 6px;">
+        I agree to the <a href="{% url 'tos' %}" target="_blank">Terms of Service</a> and <a href="{% url 'privacy' %}" target="_blank">Privacy Policy</a>
+      </label>
+    </div>
+
+    <br />
+
     <button type="submit" class="btn">Submit</button>
 
     {% if form.errors %}

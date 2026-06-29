@@ -70,6 +70,12 @@ urlpatterns = [
     path("search/", core_views.search_view, name="search"),
 
     # -----------------------------
+    # Legal
+    # -----------------------------
+    path("tos/", core_views.tos, name="tos"),
+    path("privacy/", core_views.privacy, name="privacy"),
+
+    # -----------------------------
     # Dev
     # -----------------------------
     path("devnotes/", core_views.devnotes, name="devnotes"),

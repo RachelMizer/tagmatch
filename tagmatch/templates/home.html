@@ -64,7 +64,7 @@
             <div class="message-tiles">
             {% for message in latest_messages %}
                 <div class="message-card">
-                    <a href="{% url 'messages:conversation' message.sender.username %}"><strong>{{ message.sender.username }}</strong></a>
+                    <a href="{% url 'messages:conversation' message.partner.username %}"><strong>{{ message.partner.username }}</strong></a>
                     <div class="message-preview">{{ message.body|truncatechars:50 }}</div>
                     <div class="message-time">{{ message.sent_at|naturaltime }}</div>
                 </div>
@@ -85,15 +85,15 @@
             {% for member in new_members %}
             <tr>
                 <td>
-                    <div class="icocont">
-                        <a href="{% url 'profile_view' member.username %}">
+                    <a href="{% url 'profile_view' member.username %}">
+                        <div class="chat-avatar">
                             {% if member.profile.image %}
                                 <img src="{{ member.profile.image.url }}" alt="{{ member.username }}">
                             {% else %}
                                 <img src="{% static 'img/default-profile.png' %}" alt="Default">
                             {% endif %}
-                        </a>
-                    </div>
+                        </div>
+                    </a>
                 </td>
                 <td>
                     <div class="dbUN" style="margin-left: 8px;">

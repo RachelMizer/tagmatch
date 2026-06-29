@@ -9,6 +9,9 @@ from gallery.models import GalleryImage
 from taggit.models import Tag
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.signing import TimestampSigner, BadSignature
+from django.core.mail import send_mail
+from django.conf import settings as django_settings
 
 # dictionary for relationship type labels
 RELATIONSHIP_LABELS = {
@@ -19,6 +22,19 @@ RELATIONSHIP_LABELS = {
     'ethical_non_mon': 'Ethical Non-Monogamous',
 }
 
+def _send_verification_email(user, request):
+    signer = TimestampSigner()
+    token = signer.sign(user.pk)
+    verify_url = request.build_absolute_uri(f"/profiles/verify-email/{token}/")
+    send_mail(
+        subject="Verify your TagMatch email address",
+        message=f"Hi {user.first_name or user.username},\n\nPlease verify your email address by clicking the link below:\n\n{verify_url}\n\nThis link expires in 24 hours.\n\n— The TagMatch Team",
+        from_email=django_settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[user.email],
+        fail_silently=True,
+    )
+
+
 def register(request):
     if request.method == "POST":
         form = RegistrationForm(request.POST, request.FILES)
@@ -26,6 +42,7 @@ def register(request):
             user = form.save(commit=False)
             user.first_name = form.cleaned_data["first_name"]
             user.last_name = form.cleaned_data["last_name"]
+            user.email = form.cleaned_data["email"]
             user.set_password(form.cleaned_data["password"])
             user.save()
 
@@ -43,12 +60,33 @@ def register(request):
                 image=form.cleaned_data.get("profile_image"),
             )
 
+            _send_verification_email(user, request)
             auth_login(request, user)
             return redirect("home")
     else:
         form = RegistrationForm()
 
     return render(request, "register.html", {"form": form})
+
+
+def verify_email(request, token):
+    signer = TimestampSigner()
+    try:
+        user_pk = signer.unsign(token, max_age=86400)
+        user = User.objects.get(pk=user_pk)
+        user.profile.email_verified = True
+        user.profile.save(update_fields=["email_verified"])
+        return render(request, "verify_email_done.html", {"success": True})
+    except (BadSignature, User.DoesNotExist):
+        return render(request, "verify_email_done.html", {"success": False})
+
+
+@login_required
+def resend_verification(request):
+    if not request.user.profile.email_verified:
+        _send_verification_email(request.user, request)
+        messages.success(request, "Verification email sent. Check your inbox.")
+    return redirect("my_profile")
 
 
 @login_required
