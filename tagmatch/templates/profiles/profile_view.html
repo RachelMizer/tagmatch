@@ -19,11 +19,18 @@
         <a class="editprof" href="{% url 'messages:compose' %}?to={{ profile.user.username }}">
             Send {{ profile.user.username }} a Message
         </a><br />
-
         <a class="editprof" href="{% url 'gallery_view' profile.user.username %}">
             View {{ profile.user.username }}'s Gallery
         </a>
     </p>
+
+    {% if user != profile.user %}
+    <p>
+        <a class="editprof danger-link" href="{% url 'block_user' profile.user.username %}">Block this User</a>
+        &nbsp;|&nbsp;
+        <a class="editprof danger-link" href="{% url 'report_user' profile.user.username %}">Report this User</a>
+    </p>
+    {% endif %}
 
     {% if profile.image %}
         <div class="profpic-wrap">
@@ -86,15 +93,16 @@
     <br />
 
     <!-- Tag Cloud -->
-    <h2>{{ profile.user.first_name }}'s Tags</h2>
-
-    {% if profile.interests %}
-        {% for tag in profile.interests|split:"," %}
-            <span>{{ tag }}</span>
-        {% endfor %}
-    {% else %}
-        <p>This user hasn't added any tags yet.</p>
-    {% endif %}
+    <div class="tag-cloud">
+        <h3 class="pagetitle">{{ profile.user.first_name }}'s Tags</h3>
+        <div class="tags">
+            {% for tag in user_tags %}
+                <span class="tag selected">{{ tag.name }}</span>
+            {% empty %}
+                <p>This user hasn't added any tags yet.</p>
+            {% endfor %}
+        </div>
+    </div>
 
 </div>
 

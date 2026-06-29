@@ -8,27 +8,40 @@
 
 <div class="dev-cont">
 <h2 class="pagetitle">Requirements & Dependencies</h2>
+
+<h3 class="pagesub">Core</h3>
 <ul>
-    <li><strong>Python:</strong> 3.10+ recommended</li>
-    <li><strong>Django:</strong> 5.x</li>
-    <li><strong>django-taggit:</strong> For tag management</li>
-    <li><strong>Pillow:</strong> For image handling (profile photos, gallery)</li>
-    <li><strong>SQLite:</strong> Default dev database (PostgreSQL recommended for production)</li>
-    <li><strong>Bootstrap (optional):</strong> Used lightly for layout and forms</li>
-    <li><strong>django-crispy-forms (optional):</strong> If you choose to use it for form rendering</li>
+    <li><strong>Python 3.13</strong></li>
+    <li><strong>Django 5.2.8</strong></li>
+    <li><strong>SQLite</strong> — default dev database (PostgreSQL recommended for production)</li>
+    <li><strong>asgiref 3.11.0</strong> — ASGI support layer for Django</li>
+    <li><strong>sqlparse 0.5.3</strong> — SQL formatting (Django dependency)</li>
 </ul>
-<br />
-<h3 class="pagesub">Local Development Requirements</h3>
+
+<h3 class="pagesub">Installed Packages</h3>
 <ul>
-    <li>Virtual environment (venv)</li>
-    <li>Environment variables for secret key & debug settings</li>
-    <li>Static files collected via <code>python manage.py collectstatic</code></li>
+    <li><strong>django-taggit 6.1.0</strong> — tag management for user profiles and matching</li>
+    <li><strong>django-filter 25.2</strong> — search and filtering support</li>
+    <li><strong>Pillow 12.0.0</strong> — image handling: profile photo upload, EXIF correction, square crop, resize</li>
+    <li><strong>django-storages 1.14.6</strong> — pluggable file storage backends (AWS S3 ready)</li>
+    <li><strong>boto3 1.41.3 / botocore 1.41.3</strong> — AWS SDK (required by django-storages for S3)</li>
+    <li><strong>tzdata 2025.2</strong> — timezone data</li>
+    <li><strong>python-dateutil 2.9.0</strong> — extended date/time parsing</li>
 </ul>
-<br />
+
+<h3 class="pagesub">Local Development Setup</h3>
+<ul>
+    <li>Virtual environment (<code>.venv</code>)</li>
+    <li><code>.env</code> file at project root — holds <code>SECRET_KEY</code> and <code>DEBUG</code> (loaded automatically by settings.py, never committed to git)</li>
+    <li>Run: <code>python manage.py migrate</code> before first launch</li>
+    <li>Run: <code>python manage.py runserver</code> to start dev server at <code>http://127.0.0.1:8000</code></li>
+    <li>Static files: <code>python manage.py collectstatic</code> (production only)</li>
+</ul>
+
 <h3 class="pagesub">Recommended Tools</h3>
 <ul>
     <li>VS Code</li>
-    <li>Git for version control</li>
+    <li>Git + GitHub (<a href="https://github.com/RachelMizer/tagmatch">github.com/RachelMizer/tagmatch</a>)</li>
 </ul>
 
 </div>

@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image, ImageOps
 from taggit.managers import TaggableManager
+import io
 
 class Tag(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -39,6 +40,12 @@ class Profile(models.Model):
     tags = TaggableManager()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    TIME_FORMAT_CHOICES = [
+        ('12hr', '12-hour (AM/PM)'),
+        ('24hr', '24-hour'),
+    ]
+    time_format = models.CharField(max_length=4, choices=TIME_FORMAT_CHOICES, default='12hr')
+
     def __str__(self):
         return f"{self.user.username}'s profile"
 
@@ -72,4 +79,34 @@ class Profile(models.Model):
 
             except FileNotFoundError:
                 pass
+
+
+class Block(models.Model):
+    blocker = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blocking')
+    blocked = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blocked_by')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('blocker', 'blocked')
+
+    def __str__(self):
+        return f"{self.blocker.username} blocked {self.blocked.username}"
+
+
+class Report(models.Model):
+    REASON_CHOICES = [
+        ('harassment', 'Harassment'),
+        ('fake_profile', 'Fake Profile'),
+        ('inappropriate', 'Inappropriate Content'),
+        ('spam', 'Spam'),
+        ('other', 'Other'),
+    ]
+    reporter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reports_made')
+    reported = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reports_received')
+    reason = models.CharField(max_length=20, choices=REASON_CHOICES)
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.reporter.username} reported {self.reported.username} ({self.reason})"
 

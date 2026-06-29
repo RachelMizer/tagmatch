@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="prof-cont">
+    <h2 class="pagetitle">Blocked & Reported Users</h2>
+
+    <!-- Blocked Users -->
+    <h3 class="pagesub" style="margin-top: 24px;">Blocked Users</h3>
+    {% if blocked_users %}
+        <table>
+            {% for block in blocked_users %}
+            <tr>
+                <td>
+                    <div class="chat-avatar" style="width:36px;height:36px;">
+                        {% if block.blocked.profile.image %}
+                            <img src="{{ block.blocked.profile.image.url }}" alt="{{ block.blocked.username }}">
+                        {% else %}
+                            <img src="{% static 'img/default-profile.png' %}" alt="Default">
+                        {% endif %}
+                    </div>
+                </td>
+                <td style="padding: 8px 12px;">
+                    <a href="{% url 'profile' block.blocked.username %}">{{ block.blocked.username }}</a>
+                </td>
+                <td>
+                    <form method="post" action="{% url 'unblock_user' block.blocked.username %}">
+                        {% csrf_token %}
+                        <button type="submit">Unblock</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>You haven't blocked anyone.</p>
+    {% endif %}
+
+    <!-- Reports Submitted -->
+    <h3 class="pagesub" style="margin-top: 32px;">Reports Submitted</h3>
+    {% if reports_made %}
+        <table>
+            <tr>
+                <th style="text-align:left; padding: 4px 12px;">User</th>
+                <th style="text-align:left; padding: 4px 12px;">Reason</th>
+                <th style="text-align:left; padding: 4px 12px;">Date</th>
+            </tr>
+            {% for report in reports_made %}
+            <tr>
+                <td style="padding: 6px 12px;">
+                    <a href="{% url 'profile' report.reported.username %}">{{ report.reported.username }}</a>
+                </td>
+                <td style="padding: 6px 12px;">{{ report.get_reason_display }}</td>
+                <td style="padding: 6px 12px; color: #888;">{{ report.created_at|date:"M d, Y" }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>You haven't submitted any reports.</p>
+    {% endif %}
+
+    <br />
+    <a href="{% url 'my_profile' %}">Back to My Profile</a>
+</div>
+{% endblock %}

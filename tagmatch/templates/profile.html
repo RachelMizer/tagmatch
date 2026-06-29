@@ -12,8 +12,11 @@
 
     <!-- Basic Info -->
     <h2 class="pagetitle">Your Profile</h2>
-    <p><a class="editprof" href="{% url 'edit_profile' %}">Edit Profile</a><br />
-    <a class="editprof" href="{% url 'gallery' %}">View Your Gallery</a></p>
+    <p>
+        <a class="editprof" href="{% url 'edit_profile' %}">Edit Profile</a><br />
+        <a class="editprof" href="{% url 'gallery' %}">View Your Gallery</a><br />
+        <a class="editprof" href="{% url 'blocked_reported' %}">Blocked &amp; Reported Users</a>
+    </p>
 
     <!-- Profile Image -->
     {% if user.profile.image %}

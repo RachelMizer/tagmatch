@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="mess-cont">
-    <h1 class="pagetitle">Messages</h1>
+    <h2 class="pagetitle">Messages</h2>
 
     <h3>Options</h3>
     <div class="inbox-menu">
@@ -24,21 +24,21 @@
 
                     <div class="sender">
                         <div class="icocont">
-                            {% if message.sender.profile.image %}
-                                <img src="{{ message.sender.profile.image.url }}" alt="Profile pic">
+                            {% if message.partner.profile.image %}
+                                <img src="{{ message.partner.profile.image.url }}" alt="Profile pic">
                             {% else %}
                                 <img src="{% static 'img/default-profile.png' %}" alt="Default pic">
                             {% endif %}
                         </div>
 
                         <div class="sendertag">
-                            <a href="{% url 'profile' message.sender.username %}">
-                                {{ message.sender.username }}
+                            <a href="{% url 'profile' message.partner.username %}">
+                                {{ message.partner.username }}
                             </a>
                         </div>
 
                         <p class="timestamp">
-                            SENT {{ message.sent_at|date:"M d, H:i" }}
+                            {{ message.sent_at|date:"M d, H:i" }}
                         </p>
                     </div>
 
@@ -56,7 +56,7 @@
                         <br />
 
                         <!-- link to conversation -->
-                        <a href="{% url 'messages:conversation' message.sender.username %}"
+                        <a href="{% url 'messages:conversation' message.partner.username %}"
                            class="msgmore {% if not message.read %}unread{% endif %}">
                             View Conversation >>
                         </a>

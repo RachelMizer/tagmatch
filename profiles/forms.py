@@ -1,7 +1,7 @@
 # PROFILES forms.py
 from django import forms
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, Report
 
 RELATIONSHIP_CHOICES = [
     ("friendship", "Friendship"),
@@ -57,6 +57,11 @@ class ProfileForm(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple,
         required=False,
     )
+    date_of_birth = forms.DateField(
+        required=False,
+        widget=forms.DateInput(format='%m-%d-%Y', attrs={"placeholder": "MM-DD-YYYY"}),
+        input_formats=['%m-%d-%Y', '%Y-%m-%d'],
+    )
 
     class Meta:
         model = Profile
@@ -71,4 +76,14 @@ class ProfileForm(forms.ModelForm):
             "relationship_types_seeking",
             "children_status",
             "image",
+            "time_format",
         ]
+
+
+class ReportForm(forms.ModelForm):
+    class Meta:
+        model = Report
+        fields = ['reason', 'description']
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Please describe what happened...'}),
+        }

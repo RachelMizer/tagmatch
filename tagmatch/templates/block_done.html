@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="prof-cont">
+    <h2 class="pagetitle">User Blocked</h2>
+    <p><strong>{{ target.username }}</strong> has been blocked.</p>
+    <p style="color: #666; font-size: 0.9rem;">They will no longer appear in your matches or search results.</p>
+    <br />
+    <a href="{% url 'home' %}">Back to Home</a> &nbsp;|&nbsp;
+    <a href="{% url 'blocked_reported' %}">View Blocked Users</a>
+</div>
+{% endblock %}

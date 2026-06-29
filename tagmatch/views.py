@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
 from django.core.paginator import Paginator
 from taggit.models import Tag
+from profiles.models import Block
 
 
 
@@ -48,10 +49,15 @@ def home(request):
     user = request.user
     user_tags = user.profile.tags.all()
 
+    blocked_ids = Block.objects.filter(blocker=user).values_list('blocked_id', flat=True)
+    blocking_ids = Block.objects.filter(blocked=user).values_list('blocker_id', flat=True)
+    excluded_ids = set(blocked_ids) | set(blocking_ids)
+
     latest_matches = (
         User.objects
         .filter(profile__tags__in=user_tags)
         .exclude(id=user.id)
+        .exclude(id__in=excluded_ids)
         .annotate(shared_count=Count("profile__tags"))
         .order_by("-shared_count")
         .distinct()[:5]
@@ -64,12 +70,15 @@ def home(request):
     one_week_ago = timezone.now() - timedelta(days=7)
     new_members = User.objects.filter(
         date_joined__gte=one_week_ago
-    ).order_by("-date_joined")
+    ).exclude(id__in=excluded_ids).order_by("-date_joined")
+
+    no_tags = user.profile.tags.count() == 0
 
     context = {
         "latest_matches": latest_matches,
         "latest_messages": latest_messages,
         "new_members": new_members,
+        "no_tags": no_tags,
     }
 
     return render(request, "home.html", context)
@@ -95,10 +104,15 @@ def matches_view(request):
     user = request.user
     user_tags = user.profile.tags.all()
 
+    blocked_ids = Block.objects.filter(blocker=user).values_list('blocked_id', flat=True)
+    blocking_ids = Block.objects.filter(blocked=user).values_list('blocker_id', flat=True)
+    excluded_ids = set(blocked_ids) | set(blocking_ids)
+
     matches_qs = (
         User.objects
         .filter(profile__tags__in=user_tags)
         .exclude(id=user.id)
+        .exclude(id__in=excluded_ids)
         .annotate(shared_count=Count("profile__tags"))
         .order_by("-shared_count")
         .distinct()
@@ -132,7 +146,12 @@ def search_view(request):
     all_tags = Tag.objects.all().order_by("name")
     selected_tag_ids = request.GET.getlist("tags")
 
-    users_qs = User.objects.exclude(id=request.user.id)
+    user = request.user
+    blocked_ids = Block.objects.filter(blocker=user).values_list('blocked_id', flat=True)
+    blocking_ids = Block.objects.filter(blocked=user).values_list('blocker_id', flat=True)
+    excluded_ids = set(blocked_ids) | set(blocking_ids)
+
+    users_qs = User.objects.exclude(id=user.id).exclude(id__in=excluded_ids)
 
     if selected_tag_ids:
         users_qs = users_qs.filter(profile__tags__id__in=selected_tag_ids).distinct()

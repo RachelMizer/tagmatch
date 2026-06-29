@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="prof-cont">
+    <h2 class="pagetitle">Delete Account</h2>
+    <p>Are you sure you want to permanently delete your account?</p>
+    <p><strong>This cannot be undone.</strong> Your profile, messages, and all data will be removed.</p>
+    <br />
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn-danger">Yes, Delete My Account</button>
+        <a href="{% url 'edit_profile' %}" style="margin-left: 16px;">Cancel</a>
+    </form>
+</div>
+{% endblock %}

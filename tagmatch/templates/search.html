@@ -5,7 +5,7 @@
 {% load static %}
 
 {% block content %}
-<h1 class="pagetitle">Search Users by Tags</h1>
+<h2 class="pagetitle">Search Users by Tags</h2>
 
 <div class="search-container">
 
@@ -34,22 +34,27 @@
 
     <!-- Results -->
     <section class="search-results">
+        {% if not selected_tag_ids %}
+            <h3 class="pagesub">Browse All Members</h3>
+        {% endif %}
         {% if users %}
             {% for user in users %}
                 <div class="result-card">
                     <a href="{% url 'profile' user.username %}">
-                        {% if user.profile.image %}
-                            <img src="{{ user.profile.image.url }}" alt="{{ user.username }}">
-                        {% else %}
-                            <img src="{% static 'img/default-profile.png' %}" alt="Default">
-                        {% endif %}
+                        <div class="chat-avatar result-avatar">
+                            {% if user.profile.image %}
+                                <img src="{{ user.profile.image.url }}" alt="{{ user.username }}">
+                            {% else %}
+                                <img src="{% static 'img/default-profile.png' %}" alt="Default">
+                            {% endif %}
+                        </div>
                     </a>
 
                     <h2>{{ user.username }}</h2>
 
                     <div class="user-tags">
                         {% for tag in user.profile.tags.all %}
-                            <span class="tag">{{ tag.name }}</span>
+                            <span class="tag">#{{ tag.name }}</span>
                         {% endfor %}
                     </div>
                 </div>

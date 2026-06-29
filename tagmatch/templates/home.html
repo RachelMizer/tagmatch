@@ -10,169 +10,111 @@
 
 <div class="dashboard-container">
 
-<h1 class="pagetitle">Welcome back!</h1>
+<h2 class="pagetitle">Welcome back!</h2>
 
 <h2 class="pagesub">Here are your latest updates.</h2>
+
+{% if no_tags %}
+<div class="onboarding-nudge">
+    <strong>Welcome to TagMatch!</strong> Start by adding tags to your profile so we can find your matches.
+    <a href="{% url 'edit_profile' %}">Add Tags &rarr;</a>
+</div>
+{% endif %}
 
 <div class="dashboard">
 
     <!-- Latest Matches -->
     <div class="dashboard-sect">
-        <h2 class="pagesub TT">Your Latest Matches</h2>
+        <h2 class="pagesub TT">✨ Your Latest Matches</h2>
 
         {% if latest_matches %}
-            <ul>
-                {% for match in latest_matches %}
-                    <li>
-                        <strong>{{ match.matched_user.username }}</strong>
-                        — Score: {{ match.score }}
-                    </li>
-                {% endfor %}
-            </ul>
+        <div class="matches-list">
+            {% for match in latest_matches %}
+                <div class="match-card">
+                    <div class="match-card-top">
+                        <a href="{% url 'profile_view' match.username %}">
+                            <div class="chat-avatar">
+                                {% if match.profile.image %}
+                                    <img src="{{ match.profile.image.url }}" alt="{{ match.username }}">
+                                {% else %}
+                                    <img src="{% static 'img/default-profile.png' %}" alt="Default">
+                                {% endif %}
+                            </div>
+                        </a>
+                        <a class="match-name" href="{% url 'profile_view' match.username %}">
+                            {{ match.username }}
+                        </a>
+                    </div>
+                    <div class="match-score">
+                        {{ match.shared_count }} tag{{ match.shared_count|pluralize }} in common
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
         {% else %}
-            <p>No matches yet.</p>
+            <p>No matches yet. Add some tags to your profile to get matched!</p>
         {% endif %}
     </div>
 
     <!-- Latest Messages -->
-<!-- Latest Messages -->
-<div class="dashboard-sect">
-    <h2 class="pagesub TT">Latest Messages</h2>
+    <div class="dashboard-sect">
+        <h2 class="pagesub TT">💬 Latest Messages</h2>
 
-    {% if latest_messages %}
-        {% for message in latest_messages %}
-            <div class="message-card">
-                <a href="{% url 'messages:thread' message.sender.username %}">
-                    <strong>{{ message.sender.username }}</strong>
-                </a>
-                <div class="message-preview">
-                    {{ message.content|truncatechars:50 }}
+        {% if latest_messages %}
+            <div class="message-tiles">
+            {% for message in latest_messages %}
+                <div class="message-card">
+                    <a href="{% url 'messages:conversation' message.sender.username %}"><strong>{{ message.sender.username }}</strong></a>
+                    <div class="message-preview">{{ message.body|truncatechars:50 }}</div>
+                    <div class="message-time">{{ message.sent_at|naturaltime }}</div>
                 </div>
-                <div class="message-time">
-                    {{ message.sent_at|naturaltime }}
-                </div>
+            {% endfor %}
             </div>
-        {% endfor %}
-    {% else %}
-        <p>You have no messages yet.</p>
-    {% endif %}
-</div>
-
-
-<!-- Latest Matches -->
-<div class="dashboard-sect">
-    <h2 class="pagesub TT">Latest Matches</h2>
-
-    {% if latest_matches %}
-    <div class="matches-list">
-
-{% for match in latest_matches %}
-    {% if match.user == request.user %}
-        {% with other=match.matched_user %}
-            <div class="match-card">
-                <a href="{% url 'profile_view' other.username %}">
-                    <div class="match-avatar-wrap">
-                        {% if other.profile.image %}
-                            <img src="{{ other.profile.image.url }}" alt="{{ other.username }}">
-                        {% else %}
-                            <img src="{% static 'img/default-profile.png' %}" alt="Default">
-                        {% endif %}
-                    </div>
-                </a>
-
-                <div class="match-info">
-                    <a class="match-name" href="{% url 'profile_view' other.username %}">
-                        {{ other.username }}
-                    </a>
-                    <div class="match-score">{{ match.score }}% match</div>
-                </div>
-            </div>
-        {% endwith %}
-    {% else %}
-        {% with other=match.user %}
-            <div class="match-card">
-                <a href="{% url 'profile_view' other.username %}">
-                    <div class="match-avatar-wrap">
-                        {% if other.profile.image %}
-                            <img src="{{ other.profile.image.url }}" alt="{{ other.username }}">
-                        {% else %}
-                            <img src="{% static 'img/default-profile.png' %}" alt="Default">
-                        {% endif %}
-                    </div>
-                </a>
-
-                <div class="match-info">
-                    <a class="match-name" href="{% url 'profile_view' other.username %}">
-                        {{ other.username }}
-                    </a>
-                    <div class="match-score">{{ match.score }}% match</div>
-                </div>
-            </div>
-        {% endwith %}
-    {% endif %}
-{% endfor %}
-
-
+        {% else %}
+            <p>You have no messages yet.</p>
+        {% endif %}
     </div>
-    {% else %}
-        <p>You have no matches yet.</p>
-    {% endif %}
-</div>
-
 
     <!-- New Members -->
     <div class="dashboard-newusers">
 
         <h2 style="margin-top:5px;">New Members This Week</h2>
 
-<table>
+        <table>
+        {% if new_members %}
+            {% for member in new_members %}
+            <tr>
+                <td>
+                    <div class="icocont">
+                        <a href="{% url 'profile_view' member.username %}">
+                            {% if member.profile.image %}
+                                <img src="{{ member.profile.image.url }}" alt="{{ member.username }}">
+                            {% else %}
+                                <img src="{% static 'img/default-profile.png' %}" alt="Default">
+                            {% endif %}
+                        </a>
+                    </div>
+                </td>
+                <td>
+                    <div class="dbUN" style="margin-left: 8px;">
+                        <a href="{% url 'profile_view' member.username %}">
+                            {{ member.username }}
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="2"><p>No new members this week.</p></td>
+            </tr>
+        {% endif %}
+        </table>
 
-{% if new_members %}
-    {% for member in new_members %}
-    <tr>
+    </div>
 
-        <!-- Profile Image -->
-        <td>
-            <div class="icocont">
-                <a href="{% url 'profile_view' member.username %}">
-                    {% if member.profile.image %}
-                        <img src="{{ member.profile.image.url }}" alt="{{ member.username }}">
-                    {% else %}
-                        <img src="{% static 'img/default-profile.png' %}" alt="Default">
-                    {% endif %}
-                </a>
-            </div>
-        </td>
+</div> <!-- dashboard closing -->
 
-        <!-- Username -->
-        <td>
-            <div class="dbUN" style="margin-left: 8px;">
-                <a href="{% url 'profile_view' member.username %}">
-                    {{ member.username }}
-                </a>
-            </div>
-        </td>
-
-    </tr>
-    {% endfor %}
-
-{% else %}
-    <tr>
-        <td colspan="2">
-            <p>No new members this week.</p>
-        </td>
-    </tr>
-{% endif %}
-
-</table>
-
-
-        </div> <!-- dashboard-user closing -->
-
-    </div> <!-- dashboard new-users closing -->
-
-    </div> <!-- dashboard closing-->
-
-    </div> <!-- dashboard container closing -->
+</div> <!-- dashboard-container closing -->
 
 {% endblock %}

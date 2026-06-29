@@ -7,7 +7,7 @@
 
 <div class="conversation-container">
 
-    <h2 class="pagetitle">Conversation with {{ other_user.first_name }}</h2>
+    <h2 class="conversation-title">Conversation with {{ other_user.first_name }}</h2>
 
     <div class="backlink">
         <a href="{% url 'messages:inbox' %}">&larr; Back to Inbox</a>
@@ -20,12 +20,14 @@
                 <div class="message-row {% if msg.sender == request.user %}sent{% else %}received{% endif %}">
 
                     <!-- avatar -->
-                    <div class="icocont avatar">
-                        {% if msg.sender.profile.image %}
-                            <img src="{{ msg.sender.profile.image.url }}" alt="Avatar">
-                        {% else %}
-                            <img src="{% static 'img/default-profile.png' %}" alt="Avatar">
-                        {% endif %}
+                    <div class="chat-avatar">
+                        <a href="{% url 'profile_view' msg.sender.username %}">
+                            {% if msg.sender.profile.image %}
+                                <img src="{{ msg.sender.profile.image.url }}" alt="Avatar">
+                            {% else %}
+                                <img src="{% static 'img/default-profile.png' %}" alt="Avatar">
+                            {% endif %}
+                        </a>
                     </div>
 
                     <!-- bubble -->
@@ -33,7 +35,7 @@
                         <p>{{ msg.body }}</p>
 
                         <span class="chat-timestamp">
-                            {{ msg.sent_at|date:"M d, H:i" }}
+                            {{ msg.sent_at|date:time_fmt }}
                         </span>
 
                         <!-- delete link (sender only) -->
@@ -62,34 +64,13 @@
         </form>
     </div>
 
-    <!-- Typing indicator -->
-    <div id="typing-indicator" class="typing-indicator" style="display:none;">
-        <br />
-        {{ other_user.first_name }} is typing…
-    </div>
-
 </div>
 
-<!-- auto-scroll + typing indicator -->
 <script>
     // auto-scroll to bottom
     const thread = document.getElementById('thread');
     if (thread) {
         thread.scrollTop = thread.scrollHeight;
-    }
-
-    // typing indicator
-    const textarea = document.querySelector('textarea');
-    const indicator = document.getElementById('typing-indicator');
-
-    if (textarea) {
-        textarea.addEventListener('input', () => {
-            indicator.style.display = 'block';
-            clearTimeout(window.typingTimeout);
-            window.typingTimeout = setTimeout(() => {
-                indicator.style.display = 'none';
-            }, 1500);
-        });
     }
 </script>
 

@@ -1,7 +1,7 @@
 # PROFILES admin.py
 
 from django.contrib import admin
-from .models import Profile
+from .models import Profile, Block, Report
 from django.utils.html import format_html
 
 @admin.register(Profile)
@@ -14,3 +14,16 @@ class ProfileAdmin(admin.ModelAdmin):
         return "—"
 
     image_preview.short_description = "Profile Image"
+
+
+@admin.register(Block)
+class BlockAdmin(admin.ModelAdmin):
+    list_display = ("blocker", "blocked", "created_at")
+    list_filter = ("created_at",)
+
+
+@admin.register(Report)
+class ReportAdmin(admin.ModelAdmin):
+    list_display = ("reporter", "reported", "reason", "created_at")
+    list_filter = ("reason", "created_at")
+    readonly_fields = ("reporter", "reported", "reason", "description", "created_at")

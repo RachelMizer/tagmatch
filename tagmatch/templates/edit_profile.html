@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="prof-cont">
-    <h1 class="pagetitle">Edit Your Profile</h1>
+    <h2 class="pagetitle">Edit Your Profile</h2>
 
     <!-- PROFILE FORM -->
     <form method="post" enctype="multipart/form-data">
@@ -60,6 +60,11 @@
                 <td class="image-sect"><label for="id_image">Profile Image</label></td>
                 <td class="image-sect">{{ form.image }}</td>
             </tr>
+
+            <tr>
+                <td><label for="id_time_format">Time Format</label></td>
+                <td>{{ form.time_format }}</td>
+            </tr>
         </table>
 
         <br />
@@ -101,6 +106,14 @@
     </div>
 
 </div>
+
+    <!-- Danger Zone -->
+    <div style="margin-top: 40px; border-top: 1px solid #e0d5f5; padding-top: 20px;">
+        <h3 style="color: #c0392b; font-family: montserratbold;">Danger Zone</h3>
+        <p style="font-size: 0.9rem; color: #666;">Permanently delete your account and all associated data. This cannot be undone.</p>
+        <a href="{% url 'delete_account' %}" class="btn-danger" style="display:inline-block; margin-top: 8px;">Delete My Account</a>
+    </div>
+
         <br />
         <br />
 

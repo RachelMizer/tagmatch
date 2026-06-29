@@ -14,23 +14,25 @@ from .forms import ReplyForm
 
 @login_required
 def inbox(request):
-    # get latest message per sender
-    latest_messages = (
-        Message.objects
-        .filter(recipient=request.user)
-        .values("sender")
-        .annotate(latest_sent=Max("sent_at"))
-        .order_by("-latest_sent")
-    )
+    user = request.user
 
-    # Conver into actual message objects
-    messages = Message.objects.filter(
-        sender__in=[item["sender"] for item in latest_messages],
-        sent_at__in=[item["latest_sent"] for item in latest_messages]
-    ).order_by("-sent_at")
+    # All messages involving the user, newest first
+    all_messages = Message.objects.filter(
+        Q(sender=user) | Q(recipient=user)
+    ).order_by('-sent_at').select_related('sender', 'recipient')
+
+    # One entry per conversation partner — whichever message is most recent
+    seen = set()
+    conversations = []
+    for msg in all_messages:
+        partner = msg.recipient if msg.sender == user else msg.sender
+        if partner.id not in seen:
+            seen.add(partner.id)
+            msg.partner = partner
+            conversations.append(msg)
 
     return render(request, "messages/inbox.html", {
-        "messages": messages
+        "messages": conversations
     })
 
 # compose — start a brand new conversation
@@ -81,10 +83,13 @@ def conversation_view(request, username):
     else:
         form = ReplyForm()
 
+    time_fmt = "M d, g:i A" if request.user.profile.time_format == "12hr" else "M d, H:i"
+
     return render(request, "messages/conversation.html", {
         "thread": thread,
         "other_user": other_user,
         "form": form,
+        "time_fmt": time_fmt,
     })
 
 

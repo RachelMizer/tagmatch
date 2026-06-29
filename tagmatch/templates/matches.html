@@ -4,15 +4,14 @@
 {% load static %}
 
 {% block content %}
-<h1 class="pagetitle">Your Matches</h1>
+<h2 class="pagetitle">Your Matches</h2>
 
 <div class="matches-list">
     {% for match in matches %}
         <div class="match-card">
 
             <div class="match-header">
-
-                <div class="icocontnav">
+                <div class="chat-avatar">
                     <a href="{% url 'profile' match.username %}">
                         {% if match.profile.image %}
                             <img src="{{ match.profile.image.url }}" alt="{{ match.username }}">
@@ -21,14 +20,11 @@
                         {% endif %}
                     </a>
                 </div>
-
-                <h2>{{ match.username }}</h2>
-
-                <p class="match-score">
-                    {{ match.shared_count }} tag{{ match.shared_count|pluralize }} in common
-                </p>
-
+                <h2><a href="{% url 'profile' match.username %}">{{ match.username }}</a></h2>
             </div>
+            <p class="match-score">
+                {{ match.shared_count }} tag{{ match.shared_count|pluralize }} in common
+            </p>
 
             {% if match.shared_count > 0 %}
                 <div class="tags">
