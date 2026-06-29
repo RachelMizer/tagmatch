@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="support-cont">
+
+    <div class="support-breadcrumb">
+        <a href="{% url 'support:dashboard' %}">Dashboard</a> › Reports
+    </div>
+
+    <h2 class="pagetitle">📋 Reports</h2>
+
+    <div class="support-filter-bar">
+        <a href="?status=pending" class="filter-tab {% if status_filter == 'pending' %}active{% endif %}">Pending</a>
+        <a href="?status=resolved" class="filter-tab {% if status_filter == 'resolved' %}active{% endif %}">Resolved</a>
+        <a href="?status=dismissed" class="filter-tab {% if status_filter == 'dismissed' %}active{% endif %}">Dismissed</a>
+        <a href="?" class="filter-tab {% if not status_filter %}active{% endif %}">All</a>
+    </div>
+
+    {% if reports %}
+    <table class="support-table">
+        <thead>
+            <tr>
+                <th>Reporter</th>
+                <th>Reported User</th>
+                <th>Reason</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in reports %}
+            <tr>
+                <td><a href="{% url 'support:user_detail' r.reporter.username %}">{{ r.reporter.username }}</a></td>
+                <td><a href="{% url 'support:user_detail' r.reported.username %}">{{ r.reported.username }}</a></td>
+                <td>{{ r.get_reason_display }}</td>
+                <td>{{ r.created_at|date:"M d, Y" }}</td>
+                <td><span class="status-badge status-{{ r.status }}">{{ r.get_status_display }}</span></td>
+                <td><a href="{% url 'support:report_detail' r.id %}" class="support-link">Review →</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p style="color:#aaa; text-align:center; margin-top:40px;">No reports in this category.</p>
+    {% endif %}
+
+</div>
+{% endblock %}

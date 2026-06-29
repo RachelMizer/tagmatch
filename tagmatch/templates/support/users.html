@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="support-cont">
+
+    <div class="support-breadcrumb">
+        <a href="{% url 'support:dashboard' %}">Dashboard</a> › Users
+    </div>
+
+    <h2 class="pagetitle">👥 Users</h2>
+
+    <form method="get" class="support-search-bar">
+        <input type="text" name="q" value="{{ q }}" placeholder="Search by username, name, or email...">
+        <button type="submit" class="support-btn">Search</button>
+        {% if q %}<a href="{% url 'support:user_list' %}" class="support-link" style="margin-left:8px;">Clear</a>{% endif %}
+    </form>
+
+    <table class="support-table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Joined</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for u in users %}
+            <tr>
+                <td>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <div class="chat-avatar" style="width:30px;height:30px;flex-shrink:0;">
+                            {% if u.profile.image %}
+                                <img src="{{ u.profile.image.url }}" alt="">
+                            {% else %}
+                                <img src="/static/img/default-profile.png" alt="">
+                            {% endif %}
+                        </div>
+                        {{ u.username }}
+                        {% if u.profile.is_support %}<span class="support-badge">Support</span>{% endif %}
+                        {% if u.is_staff %}<span class="support-badge staff">Staff</span>{% endif %}
+                    </div>
+                </td>
+                <td>{{ u.first_name }} {{ u.last_name }}</td>
+                <td style="color:#888;">{{ u.email }}</td>
+                <td>{{ u.date_joined|date:"M d, Y" }}</td>
+                <td>
+                    {% if u.is_active %}
+                        <span class="status-badge status-resolved">Active</span>
+                    {% else %}
+                        <span class="status-badge status-dismissed">Deactivated</span>
+                    {% endif %}
+                </td>
+                <td><a href="{% url 'support:user_detail' u.username %}" class="support-link">View →</a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" style="text-align:center;color:#aaa;padding:20px;">No users found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}

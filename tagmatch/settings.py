@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'messaging',                    # optional messaging system
     # 'matches',                    # removed — unused; tag-overlap matching lives in tagmatch/views.py
     'gallery',                      # image uploads & management
+    'support',                      # support/moderation staff interface
 ]
 
 

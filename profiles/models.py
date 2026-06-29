@@ -46,6 +46,7 @@ class Profile(models.Model):
     ]
     time_format = models.CharField(max_length=4, choices=TIME_FORMAT_CHOICES, default='12hr')
     email_verified = models.BooleanField(default=False)
+    is_support = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.username}'s profile"
@@ -102,12 +103,21 @@ class Report(models.Model):
         ('spam', 'Spam'),
         ('other', 'Other'),
     ]
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('resolved', 'Resolved — Action Taken'),
+        ('dismissed', 'Dismissed — No Violation'),
+    ]
     reporter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reports_made')
     reported = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reports_received')
     reason = models.CharField(max_length=20, choices=REASON_CHOICES)
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    resolution_notes = models.TextField(blank=True)
+    resolved_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='reports_resolved')
+    resolved_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.reporter.username} reported {self.reported.username} ({self.reason})"
+        return f"{self.reporter.username} reported {self.reported.username} ({self.reason}) [{self.status}]"
 

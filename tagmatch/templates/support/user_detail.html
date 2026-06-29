@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="support-cont">
+
+    <div class="support-breadcrumb">
+        <a href="{% url 'support:dashboard' %}">Dashboard</a> ›
+        <a href="{% url 'support:user_list' %}">Users</a> › {{ target.username }}
+    </div>
+
+    <h2 class="pagetitle">👤 {{ target.username }}</h2>
+
+    {% if messages %}
+        {% for msg in messages %}
+            <div class="support-flash {{ msg.tags }}">{{ msg }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="support-two-col">
+
+        <!-- Profile Info -->
+        <div class="support-section">
+            <h3 class="support-section-title">Account Details</h3>
+
+            <div style="text-align:center; margin-bottom:16px;">
+                <div class="chat-avatar" style="width:80px;height:80px;margin:0 auto 10px;">
+                    {% if target.profile.image %}
+                        <img src="{{ target.profile.image.url }}" alt="">
+                    {% else %}
+                        <img src="{% static 'img/default-profile.png' %}" alt="">
+                    {% endif %}
+                </div>
+                {% if not target.is_active %}<span class="status-badge status-dismissed">Deactivated</span>{% endif %}
+                {% if target.profile.is_support %}<span class="support-badge">Support</span>{% endif %}
+                {% if target.is_staff %}<span class="support-badge staff">Staff</span>{% endif %}
+            </div>
+
+            <table class="support-detail-table">
+                <tr><td>Username</td><td>{{ target.username }}</td></tr>
+                <tr><td>Name</td><td>{{ target.first_name }} {{ target.last_name }}</td></tr>
+                <tr><td>Email</td><td>{{ target.email }}</td></tr>
+                <tr><td>Email Verified</td><td>{{ target.profile.email_verified|yesno:"Yes,No" }}</td></tr>
+                <tr><td>Joined</td><td>{{ target.date_joined|date:"M d, Y" }}</td></tr>
+                <tr><td>Location</td><td>{{ target.profile.location|default:"—" }}</td></tr>
+                <tr><td>Date of Birth</td><td>{{ target.profile.date_of_birth|default:"—" }}</td></tr>
+                <tr><td>Gender Identity</td><td>{{ target.profile.gender_identity|default:"—" }}</td></tr>
+                <tr><td>Sexuality</td><td>{{ target.profile.sexuality|default:"—" }}</td></tr>
+            </table>
+
+            <div class="support-actions" style="margin-top:16px;">
+                <a href="{% url 'profile' target.username %}" class="support-btn-sm" style="text-transform: none;" target="_blank">View Public Profile</a>
+                <a href="{% url 'messages:compose' %}?to={{ target.username }}" class="support-btn-sm" style="text-transform: none;">Send Message</a>
+            </div>
+        </div>
+
+        <!-- Admin Actions -->
+        <div>
+            <!-- Account Status -->
+            <div class="support-section" style="margin-bottom:16px;">
+                <h3 class="support-section-title">Account Actions</h3>
+
+                <form method="post" action="{% url 'support:toggle_active' target.username %}">
+                    {% csrf_token %}
+                    <button type="submit" class="{% if target.is_active %}btn-danger{% else %}support-btn{% endif %}" style="width:100%; margin-bottom:10px; text-transform: none;">
+                        {% if target.is_active %}Deactivate Account{% else %}Reactivate Account{% endif %}
+                    </button>
+                </form>
+
+                <form method="post" action="{% url 'support:toggle_support' target.username %}">
+                    {% csrf_token %}
+                    <button type="submit" class="support-btn" style="width:100%; text-transform: none;">
+                        {% if target.profile.is_support %}Remove Support Access{% else %}Grant Support Access{% endif %}
+                    </button>
+                </form>
+            </div>
+
+            <!-- Change Password -->
+            <div class="support-section">
+                <h3 class="support-section-title">Change Password</h3>
+                <form method="post" action="{% url 'support:change_password' target.username %}">
+                    {% csrf_token %}
+                    <div class="report-field">
+                        <label for="id_new_password">New Password</label>
+                        {{ pw_form.new_password }}
+                    </div>
+                    <div class="report-field" style="margin-top:10px;">
+                        <label for="id_confirm_password">Confirm Password</label>
+                        {{ pw_form.confirm_password }}
+                    </div>
+                    <button type="submit" class="support-btn" style="margin-top:14px; text-transform: none;">Set Password</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Reports Received -->
+    <div class="support-section" style="margin-top:24px;">
+        <h3 class="support-section-title">Reports Received ({{ reports_received.count }})</h3>
+        {% if reports_received %}
+        <table class="support-table">
+            <thead><tr><th>Reporter</th><th>Reason</th><th>Date</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+                {% for r in reports_received %}
+                <tr>
+                    <td><a href="{% url 'support:user_detail' r.reporter.username %}">{{ r.reporter.username }}</a></td>
+                    <td>{{ r.get_reason_display }}</td>
+                    <td>{{ r.created_at|date:"M d, Y" }}</td>
+                    <td><span class="status-badge status-{{ r.status }}">{{ r.get_status_display }}</span></td>
+                    <td><a href="{% url 'support:report_detail' r.id %}" class="support-link">Review →</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p class="mod-empty">No reports received.</p>
+        {% endif %}
+    </div>
+
+    <!-- Reports Filed -->
+    <div class="support-section" style="margin-top:16px;">
+        <h3 class="support-section-title">Reports Filed ({{ reports_made.count }})</h3>
+        {% if reports_made %}
+        <table class="support-table">
+            <thead><tr><th>Reported User</th><th>Reason</th><th>Date</th><th>Status</th></tr></thead>
+            <tbody>
+                {% for r in reports_made %}
+                <tr>
+                    <td><a href="{% url 'support:user_detail' r.reported.username %}">{{ r.reported.username }}</a></td>
+                    <td>{{ r.get_reason_display }}</td>
+                    <td>{{ r.created_at|date:"M d, Y" }}</td>
+                    <td><span class="status-badge status-{{ r.status }}">{{ r.get_status_display }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p class="mod-empty">No reports filed.</p>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

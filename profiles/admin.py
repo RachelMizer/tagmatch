@@ -24,6 +24,6 @@ class BlockAdmin(admin.ModelAdmin):
 
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
-    list_display = ("reporter", "reported", "reason", "created_at")
-    list_filter = ("reason", "created_at")
+    list_display = ("reporter", "reported", "reason", "status", "created_at", "resolved_by")
+    list_filter = ("reason", "status", "created_at")
     readonly_fields = ("reporter", "reported", "reason", "description", "created_at")

@@ -70,6 +70,11 @@ urlpatterns = [
     path("search/", core_views.search_view, name="search"),
 
     # -----------------------------
+    # Support / Moderation
+    # -----------------------------
+    path("support/", include("support.urls")),
+
+    # -----------------------------
     # Legal
     # -----------------------------
     path("tos/", core_views.tos, name="tos"),

@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="support-cont">
+
+    <div class="support-breadcrumb">
+        <a href="{% url 'support:dashboard' %}">Dashboard</a> ›
+        <a href="{% url 'support:report_list' %}">Reports</a> › #{{ report.id }}
+    </div>
+
+    <h2 class="pagetitle">📋 Report #{{ report.id }}</h2>
+
+    {% if messages %}
+        {% for msg in messages %}
+            <div class="support-flash">{{ msg }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="support-two-col">
+
+        <!-- Report Details -->
+        <div class="support-section">
+            <h3 class="support-section-title">Report Details</h3>
+            <table class="support-detail-table">
+                <tr><td>Status</td><td><span class="status-badge status-{{ report.status }}">{{ report.get_status_display }}</span></td></tr>
+                <tr><td>Reason</td><td>{{ report.get_reason_display }}</td></tr>
+                <tr><td>Filed</td><td>{{ report.created_at|date:"M d, Y g:i A" }}</td></tr>
+                {% if report.description %}
+                <tr><td>Description</td><td>{{ report.description }}</td></tr>
+                {% endif %}
+                {% if report.status != 'pending' %}
+                <tr><td>Resolved by</td><td>{{ report.resolved_by.username }}</td></tr>
+                <tr><td>Resolved</td><td>{{ report.resolved_at|date:"M d, Y g:i A" }}</td></tr>
+                {% if report.resolution_notes %}
+                <tr><td>Notes</td><td>{{ report.resolution_notes }}</td></tr>
+                {% endif %}
+                {% endif %}
+            </table>
+        </div>
+
+        <!-- User Cards -->
+        <div>
+            <!-- Reporter -->
+            <div class="support-section" style="margin-bottom:16px;">
+                <h3 class="support-section-title">Reporter</h3>
+                <div class="support-user-mini">
+                    <div class="chat-avatar" style="width:40px;height:40px;flex-shrink:0;">
+                        {% if report.reporter.profile.image %}
+                            <img src="{{ report.reporter.profile.image.url }}" alt="">
+                        {% else %}
+                            <img src="/static/img/default-profile.png" alt="">
+                        {% endif %}
+                    </div>
+                    <div>
+                        <strong>{{ report.reporter.username }}</strong><br>
+                        <span style="color:#888;font-size:0.85rem;">{{ reporter_reports }} other report(s) filed</span>
+                    </div>
+                </div>
+                <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+                    <a href="{% url 'support:user_detail' report.reporter.username %}" class="support-btn-sm">View Account</a>
+                    <a href="{% url 'messages:compose' %}?to={{ report.reporter.username }}" class="support-btn-sm">Message</a>
+                </div>
+            </div>
+
+            <!-- Reported User -->
+            <div class="support-section">
+                <h3 class="support-section-title">Reported User</h3>
+                <div class="support-user-mini">
+                    <div class="chat-avatar" style="width:40px;height:40px;flex-shrink:0;">
+                        {% if report.reported.profile.image %}
+                            <img src="{{ report.reported.profile.image.url }}" alt="">
+                        {% else %}
+                            <img src="/static/img/default-profile.png" alt="">
+                        {% endif %}
+                    </div>
+                    <div>
+                        <strong>{{ report.reported.username }}</strong>
+                        {% if not report.reported.is_active %}<span class="status-badge status-dismissed" style="margin-left:6px;">Deactivated</span>{% endif %}
+                        <br>
+                        <span style="color:#888;font-size:0.85rem;">{{ reported_reports }} total report(s) received</span>
+                    </div>
+                </div>
+                <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+                    <a href="{% url 'support:user_detail' report.reported.username %}" class="support-btn-sm">View Account</a>
+                    <a href="{% url 'messages:compose' %}?to={{ report.reported.username }}" class="support-btn-sm">Message</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Resolution Form -->
+    {% if report.status == 'pending' %}
+    <div class="support-section" style="margin-top:24px;">
+        <h3 class="support-section-title">Make a Decision</h3>
+        <form method="post">
+            {% csrf_token %}
+            <div class="report-field">
+                <label>Action</label>
+                {{ form.action }}
+            </div>
+            <div class="report-field" style="margin-top:16px;">
+                <label for="id_resolution_notes">Resolution Notes</label>
+                {{ form.resolution_notes }}
+            </div>
+            <div style="margin-top:20px; display:flex; gap:12px; align-items:center;">
+                <button type="submit" class="support-btn">Submit Decision</button>
+                <a href="{% url 'support:report_list' %}" class="support-link">Back to Reports</a>
+            </div>
+        </form>
+    </div>
+    {% else %}
+    <div style="text-align:center; margin-top:24px;">
+        <a href="{% url 'support:report_list' %}" class="support-link">← Back to Reports</a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="support-cont">
+
+    <h2 class="pagetitle">🛡️ Support Dashboard</h2>
+
+    <div class="support-stats">
+        <div class="stat-card {% if pending_reports %}stat-alert{% endif %}">
+            <div class="stat-number">{{ pending_reports }}</div>
+            <div class="stat-label">Pending Reports</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ total_users }}</div>
+            <div class="stat-label">Total Users</div>
+        </div>
+        <div class="stat-card {% if inactive_users %}stat-warn{% endif %}">
+            <div class="stat-number">{{ inactive_users }}</div>
+            <div class="stat-label">Deactivated Accounts</div>
+        </div>
+    </div>
+
+    <div class="support-nav-cards">
+        <a href="{% url 'support:report_list' %}" class="support-nav-card">
+            <span>📋</span>
+            <strong>Review Reports</strong>
+            <p>View and resolve user reports</p>
+        </a>
+        <a href="{% url 'support:user_list' %}" class="support-nav-card">
+            <span>👥</span>
+            <strong>Manage Users</strong>
+            <p>Search, view, and manage accounts</p>
+        </a>
+        <a href="{% url 'messages:compose' %}" class="support-nav-card">
+            <span>💬</span>
+            <strong>Send Message</strong>
+            <p>Contact a user as Support</p>
+        </a>
+        <a href="/admin/" class="support-nav-card">
+            <span>⚙️</span>
+            <strong>Django Admin</strong>
+            <p>Full database access</p>
+        </a>
+    </div>
+
+    {% if recent_reports %}
+    <div class="support-section">
+        <h3 class="support-section-title">Recent Reports</h3>
+        <table class="support-table">
+            <thead>
+                <tr>
+                    <th>Reporter</th>
+                    <th>Reported</th>
+                    <th>Reason</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in recent_reports %}
+                <tr>
+                    <td><a href="{% url 'support:user_detail' r.reporter.username %}">{{ r.reporter.username }}</a></td>
+                    <td><a href="{% url 'support:user_detail' r.reported.username %}">{{ r.reported.username }}</a></td>
+                    <td>{{ r.get_reason_display }}</td>
+                    <td>{{ r.created_at|date:"M d, Y" }}</td>
+                    <td><span class="status-badge status-{{ r.status }}">{{ r.get_status_display }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div style="margin-top:12px;">
+            <a href="{% url 'support:report_list' %}" class="support-link">View all reports →</a>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
