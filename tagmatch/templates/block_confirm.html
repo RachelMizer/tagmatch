@@ -1,24 +1,35 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-<div class="prof-cont">
-    <h2 class="pagetitle">Block User</h2>
+
+<div class="action-card {% if not already_blocked %}danger{% endif %}">
 
     {% if already_blocked %}
+        <div class="action-icon">🚫</div>
+        <h2>Already Blocked</h2>
         <p>You have already blocked <strong>{{ target.username }}</strong>.</p>
-        <a href="{% url 'profile' target.username %}">Back to Profile</a>
+        <div class="action-buttons">
+            <a href="{% url 'profile' target.username %}" class="cancel-link">Back to Profile</a>
+        </div>
+
     {% else %}
+        <div class="action-icon">🚫</div>
+        <h2>Block User</h2>
         <p>Are you sure you want to block <strong>{{ target.username }}</strong>?</p>
-        <p style="color: #666; font-size: 0.9rem;">
-            Blocking this user will hide them from your matches and search results.
-            They will not be notified that you've blocked them.
+        <p class="action-meta">
+            They will be removed from your matches and search results.
+            They won't be notified that you've blocked them.
         </p>
-        <br />
+
         <form method="post" action="{% url 'confirm_block' target.username %}">
             {% csrf_token %}
-            <button type="submit" class="btn-danger">Yes, Block {{ target.username }}</button>
-            <a href="{% url 'profile' target.username %}" style="margin-left: 16px;">Cancel</a>
+            <div class="action-buttons">
+                <button type="submit" class="btn-danger">Yes, Block {{ target.username }}</button>
+                <a href="{% url 'profile' target.username %}" class="cancel-link">Cancel</a>
+            </div>
         </form>
     {% endif %}
+
 </div>
+
 {% endblock %}

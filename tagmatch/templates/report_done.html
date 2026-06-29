@@ -1,11 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="prof-cont">
-    <h2 class="pagetitle">Report Submitted</h2>
+
+<div class="action-card">
+    <div class="action-icon">📋</div>
+    <h2>Report Submitted</h2>
     <p>Your report about <strong>{{ target.username }}</strong> has been submitted.</p>
-    <p style="color: #666; font-size: 0.9rem;">The site administrator will review it shortly. Thank you for helping keep TagMatch safe.</p>
-    <br />
-    <a href="{% url 'home' %}">Back to Home</a> &nbsp;|&nbsp;
-    <a href="{% url 'blocked_reported' %}">View Your Reports</a>
+    <p class="action-meta">The site administrator will review it. Thank you for helping keep TagMatch safe.</p>
+    <div class="nav-links">
+        <a href="{% url 'home' %}">Back to Home</a>
+        <a href="{% url 'blocked_reported' %}">View Your Reports</a>
+    </div>
 </div>
+
 {% endblock %}

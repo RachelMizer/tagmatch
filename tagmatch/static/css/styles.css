@@ -1334,3 +1334,315 @@ textarea,
     font-weight: bold;
     color: #5f3db3;
 }
+
+/* -------------------------------------------------------
+   ACTION CARDS — block confirm, delete confirm, done pages
+------------------------------------------------------- */
+.action-card {
+    background: white;
+    border-radius: 14px;
+    border: 1px solid #e0d5f5;
+    padding: 48px 40px;
+    max-width: 480px;
+    margin: 48px auto;
+    text-align: center;
+    box-shadow: 0 2px 16px rgba(95, 61, 179, 0.07);
+}
+
+.action-card .action-icon {
+    font-size: 2.8rem;
+    margin-bottom: 14px;
+}
+
+.action-card h2 {
+    font-family: montserratbold;
+    font-size: 1.6rem;
+    letter-spacing: 0.08rem;
+    text-transform: uppercase;
+    color: #3d2270;
+    margin-bottom: 12px;
+}
+
+.action-card p {
+    color: #555;
+    line-height: 1.65;
+    margin-bottom: 10px;
+    font-size: 0.97rem;
+}
+
+.action-card .action-meta {
+    color: #888;
+    font-size: 0.875rem;
+    margin-bottom: 28px;
+}
+
+.action-card .action-buttons {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 28px;
+    flex-wrap: wrap;
+}
+
+.action-card .cancel-link {
+    font-family: montserratbold;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.05rem;
+    color: #5f3db3;
+}
+
+.action-card.danger {
+    border-color: #f5d0d0;
+}
+
+.action-card.danger h2 {
+    color: #a93226;
+}
+
+.action-card .nav-links {
+    margin-top: 24px;
+    font-size: 0.9rem;
+}
+
+.action-card .nav-links a {
+    font-weight: bold;
+    color: #5f3db3;
+    margin: 0 8px;
+}
+
+/* -------------------------------------------------------
+   REPORT FORM
+------------------------------------------------------- */
+.report-form-cont {
+    max-width: 560px;
+    margin: 40px auto;
+    background: white;
+    border-radius: 14px;
+    border: 1px solid #e0d5f5;
+    padding: 40px;
+    box-shadow: 0 2px 16px rgba(95, 61, 179, 0.07);
+}
+
+.report-form-cont h2 {
+    font-family: montserratbold;
+    font-size: 1.6rem;
+    letter-spacing: 0.08rem;
+    text-transform: uppercase;
+    color: #3d2270;
+    margin-bottom: 6px;
+    text-align: center;
+}
+
+.report-form-cont .report-target {
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 28px;
+}
+
+.report-form-cont .report-target strong {
+    color: #5f3db3;
+}
+
+.report-field {
+    margin-bottom: 20px;
+}
+
+.report-field label {
+    display: block;
+    font-family: montserratbold;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.06rem;
+    color: #5f3db3;
+    margin-bottom: 6px;
+}
+
+.report-field select,
+.report-field textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    border: 1px solid #c9b8f5;
+    border-radius: 8px;
+    font-family: montserrat;
+    color: #5f3db3;
+    font-size: 0.95rem;
+}
+
+.report-form-cont .form-actions {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    margin-top: 24px;
+}
+
+/* -------------------------------------------------------
+   MODERATION PAGE — blocked & reported users
+------------------------------------------------------- */
+.moderation-cont {
+    max-width: 680px;
+    margin: 40px auto;
+    padding: 0 20px 60px;
+}
+
+.moderation-cont h2 {
+    font-family: montserratbold;
+    font-size: 2rem;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    color: #3d2270;
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.mod-section {
+    background: white;
+    border-radius: 14px;
+    border: 1px solid #e0d5f5;
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    box-shadow: 0 2px 12px rgba(95, 61, 179, 0.06);
+}
+
+.mod-section h3 {
+    font-family: montserratbold;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    color: #5f3db3;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0ebff;
+}
+
+.mod-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f7f0ff;
+}
+
+.mod-row:last-child {
+    border-bottom: none;
+}
+
+.mod-row .mod-username {
+    flex: 1;
+    font-weight: bold;
+    color: #3d2270;
+}
+
+.mod-row .mod-username a {
+    color: #5f3db3;
+}
+
+.mod-empty {
+    color: #aaa;
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.reports-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.reports-table th {
+    font-family: montserratbold;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.07rem;
+    color: #5f3db3;
+    padding: 6px 12px 10px;
+    text-align: left;
+    border-bottom: 1px solid #e0d5f5;
+}
+
+.reports-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f7f0ff;
+    font-size: 0.92rem;
+    color: #444;
+    vertical-align: middle;
+}
+
+.reports-table tr:last-child td {
+    border-bottom: none;
+}
+
+.reports-table td a {
+    color: #5f3db3;
+    font-weight: bold;
+}
+
+.mod-back {
+    text-align: center;
+    margin-top: 8px;
+}
+
+.mod-back a {
+    font-family: montserratbold;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.05rem;
+    color: #5f3db3;
+}
+
+/* -------------------------------------------------------
+   LEGAL PAGES — TOS & privacy policy
+------------------------------------------------------- */
+.legal-cont {
+    max-width: 740px;
+    margin: 40px auto;
+    padding: 0 24px 60px;
+}
+
+.legal-cont h2.pagetitle {
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+.legal-cont .legal-date {
+    text-align: center;
+    color: #aaa;
+    font-size: 0.82rem;
+    margin-bottom: 36px;
+}
+
+.legal-section {
+    margin-bottom: 28px;
+}
+
+.legal-section h3 {
+    font-family: montserratbold;
+    font-size: 0.88rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07rem;
+    color: #5f3db3;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #f0ebff;
+}
+
+.legal-section p {
+    color: #444;
+    line-height: 1.75;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+}
+
+.legal-section ul {
+    margin: 8px 0 8px 22px;
+    color: #444;
+    line-height: 1.75;
+    font-size: 0.95rem;
+}
+
+.legal-section a {
+    color: #5f3db3;
+    font-weight: bold;
+}

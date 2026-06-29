@@ -1,14 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="prof-cont">
-    <h2 class="pagetitle">Delete Account</h2>
-    <p>Are you sure you want to permanently delete your account?</p>
-    <p><strong>This cannot be undone.</strong> Your profile, messages, and all data will be removed.</p>
-    <br />
+
+<div class="action-card danger">
+    <div class="action-icon">⚠️</div>
+    <h2>Delete Account</h2>
+    <p>Are you sure you want to <strong>permanently delete</strong> your account?</p>
+    <p class="action-meta">
+        Your profile, photos, messages, and all associated data will be removed immediately.
+        This cannot be undone.
+    </p>
     <form method="post">
         {% csrf_token %}
-        <button type="submit" class="btn-danger">Yes, Delete My Account</button>
-        <a href="{% url 'edit_profile' %}" style="margin-left: 16px;">Cancel</a>
+        <div class="action-buttons">
+            <button type="submit" class="btn-danger">Yes, Delete My Account</button>
+            <a href="{% url 'edit_profile' %}" class="cancel-link">Cancel</a>
+        </div>
     </form>
 </div>
+
 {% endblock %}

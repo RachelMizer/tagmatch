@@ -1,41 +1,61 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="prof-cont">
+
+<div class="legal-cont">
     <h2 class="pagetitle">Terms of Service</h2>
-    <p style="color: #888; font-size: 0.85rem;">Last updated: June 2026</p>
+    <p class="legal-date">Last updated: June 2026</p>
 
-    <h3 class="pagesub">1. Eligibility</h3>
-    <p>You must be at least 18 years old to use TagMatch. By registering, you confirm that you meet this requirement. We reserve the right to terminate accounts found to belong to minors.</p>
+    <div class="legal-section">
+        <h3>1. Eligibility</h3>
+        <p>You must be at least 18 years old to use TagMatch. By registering, you confirm that you meet this requirement. We reserve the right to terminate accounts found to belong to minors.</p>
+    </div>
 
-    <h3 class="pagesub">2. Acceptable Use</h3>
-    <p>You agree not to use TagMatch to:</p>
-    <ul>
-        <li>Harass, threaten, or harm other users</li>
-        <li>Create fake or misleading profiles</li>
-        <li>Send spam or unsolicited advertising</li>
-        <li>Post or share illegal, explicit, or offensive content</li>
-        <li>Attempt to gain unauthorized access to any part of the platform</li>
-    </ul>
+    <div class="legal-section">
+        <h3>2. Acceptable Use</h3>
+        <p>You agree not to use TagMatch to:</p>
+        <ul>
+            <li>Harass, threaten, or harm other users</li>
+            <li>Create fake or misleading profiles</li>
+            <li>Send spam or unsolicited advertising</li>
+            <li>Post or share illegal, explicit, or offensive content</li>
+            <li>Attempt to gain unauthorized access to any part of the platform</li>
+        </ul>
+    </div>
 
-    <h3 class="pagesub">3. Your Account</h3>
-    <p>You are responsible for maintaining the security of your account and password. TagMatch is not liable for any loss resulting from unauthorized access to your account. You may delete your account at any time from the Edit Profile page.</p>
+    <div class="legal-section">
+        <h3>3. Your Account</h3>
+        <p>You are responsible for maintaining the security of your account and password. TagMatch is not liable for any loss resulting from unauthorized access to your account. You may delete your account at any time from the Edit Profile page.</p>
+    </div>
 
-    <h3 class="pagesub">4. Content</h3>
-    <p>You retain ownership of any content you upload (profile photos, messages). By uploading content, you grant TagMatch a non-exclusive license to display it on the platform. We reserve the right to remove content that violates these terms.</p>
+    <div class="legal-section">
+        <h3>4. Content</h3>
+        <p>You retain ownership of any content you upload (profile photos, messages). By uploading content, you grant TagMatch a non-exclusive license to display it on the platform. We reserve the right to remove content that violates these terms.</p>
+    </div>
 
-    <h3 class="pagesub">5. Privacy</h3>
-    <p>Your use of the platform is also governed by our <a href="{% url 'privacy' %}">Privacy Policy</a>, which is incorporated into these Terms.</p>
+    <div class="legal-section">
+        <h3>5. Privacy</h3>
+        <p>Your use of the platform is also governed by our <a href="{% url 'privacy' %}">Privacy Policy</a>, which is incorporated into these Terms.</p>
+    </div>
 
-    <h3 class="pagesub">6. Termination</h3>
-    <p>We reserve the right to suspend or terminate your account at any time for violations of these Terms. You may also close your account at any time from the Edit Profile page.</p>
+    <div class="legal-section">
+        <h3>6. Termination</h3>
+        <p>We reserve the right to suspend or terminate your account at any time for violations of these Terms. You may also close your account at any time from the Edit Profile page.</p>
+    </div>
 
-    <h3 class="pagesub">7. Disclaimers</h3>
-    <p>TagMatch is provided "as is" without warranties of any kind. We do not guarantee that you will find a match or that any particular match will be suitable for you. We are not responsible for the conduct of other users.</p>
+    <div class="legal-section">
+        <h3>7. Disclaimers</h3>
+        <p>TagMatch is provided "as is" without warranties of any kind. We do not guarantee that you will find a match or that any particular match will be suitable for you. We are not responsible for the conduct of other users.</p>
+    </div>
 
-    <h3 class="pagesub">8. Changes to These Terms</h3>
-    <p>We may update these Terms from time to time. Continued use of TagMatch after changes are posted constitutes acceptance of the updated Terms.</p>
+    <div class="legal-section">
+        <h3>8. Changes to These Terms</h3>
+        <p>We may update these Terms from time to time. Continued use of TagMatch after changes are posted constitutes acceptance of the updated Terms.</p>
+    </div>
 
-    <h3 class="pagesub">9. Contact</h3>
-    <p>For questions about these Terms, contact us through the site's admin page or report any concerns using the "Report" feature on a user's profile.</p>
+    <div class="legal-section">
+        <h3>9. Contact</h3>
+        <p>For questions about these Terms, contact us through the site's admin page or report any concerns using the "Report" feature on a user's profile.</p>
+    </div>
 </div>
+
 {% endblock %}

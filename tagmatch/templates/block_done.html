@@ -1,11 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="prof-cont">
-    <h2 class="pagetitle">User Blocked</h2>
+
+<div class="action-card">
+    <div class="action-icon">✅</div>
+    <h2>User Blocked</h2>
     <p><strong>{{ target.username }}</strong> has been blocked.</p>
-    <p style="color: #666; font-size: 0.9rem;">They will no longer appear in your matches or search results.</p>
-    <br />
-    <a href="{% url 'home' %}">Back to Home</a> &nbsp;|&nbsp;
-    <a href="{% url 'blocked_reported' %}">View Blocked Users</a>
+    <p class="action-meta">They will no longer appear in your matches, search results, or new members.</p>
+    <div class="nav-links">
+        <a href="{% url 'home' %}">Back to Home</a>
+        <a href="{% url 'blocked_reported' %}">View Blocked Users</a>
+    </div>
 </div>
+
 {% endblock %}
