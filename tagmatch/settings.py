@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     # Third-party
     'django_filters',               # search & filtering
     'taggit',                       # tagging system
-    'storages',                     # AWS S3 integration
+    'storages',                     # Azure Blob Storage integration
     # Local apps
     'profiles',                     # user profiles, images, tags
     'messaging',                    # optional messaging system
@@ -141,14 +141,38 @@ STATICFILES_DIRS = [
     BASE_DIR / "tagmatch" / "static"
 ]
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 # ---------------------------------------------------------
 # Media Files (User Uploads)
 # ---------------------------------------------------------
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / "tagmatch" / "media"
+AZURE_ACCOUNT_NAME = os.environ.get("AZURE_STORAGE_ACCOUNT_NAME", "")
+AZURE_ACCOUNT_KEY = os.environ.get("AZURE_STORAGE_ACCOUNT_KEY", "")
+AZURE_CONTAINER = os.environ.get("AZURE_STORAGE_CONTAINER", "media")
+
+if AZURE_ACCOUNT_NAME:
+    # Production: user uploads go to Azure Blob Storage
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+    MEDIA_URL = f"https://{AZURE_ACCOUNT_NAME}.blob.core.windows.net/{AZURE_CONTAINER}/"
+else:
+    # Local development: user uploads go to disk
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / "tagmatch" / "media"
 
 
 # ---------------------------------------------------------

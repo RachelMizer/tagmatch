@@ -4,6 +4,7 @@ db.sqlite3
 *.pyo
 .venv/
 .env
+.secrets/
 *.pem
 .idea/
 *.swp
@@ -13,3 +14,4 @@ media/
 /staticfiles/
 dev/
 matches/
+AZURE_DEPLOYMENT.md
