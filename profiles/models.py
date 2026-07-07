@@ -1,5 +1,6 @@
 # PROFILES models.py
 
+from django.core.files.base import ContentFile
 from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image, ImageOps
@@ -60,10 +61,14 @@ class Profile(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
-        # Only process if an actual uploaded file exists
-        if self.image and hasattr(self.image, "path"):
+        # Only process if an actual uploaded file exists. Read/write through the
+        # storage API (not self.image.path) so this works on remote backends like
+        # Azure Blob Storage, which don't support local filesystem paths.
+        if self.image:
             try:
-                img = Image.open(self.image.path)
+                self.image.open("rb")
+                img = Image.open(self.image)
+                original_format = img.format or "JPEG"
                 img = ImageOps.exif_transpose(img)
 
                 # Crop to square
@@ -77,7 +82,17 @@ class Profile(models.Model):
 
                 # Resize to 500x500
                 img = img.resize((500, 500), Image.LANCZOS)
-                img.save(self.image.path)
+
+                # JPEG can't encode an alpha channel (e.g. PNGs with transparency).
+                if original_format == "JPEG" and img.mode in ("RGBA", "P"):
+                    img = img.convert("RGB")
+
+                buffer = io.BytesIO()
+                img.save(buffer, format=original_format)
+                self.image.close()
+
+                self.image.storage.delete(self.image.name)
+                self.image.storage.save(self.image.name, ContentFile(buffer.getvalue()))
 
             except FileNotFoundError:
                 pass
