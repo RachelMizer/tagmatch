@@ -29,6 +29,14 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-fallback-do-not-use-i
 DEBUG = os.environ.get("DEBUG", "True") == "True"
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
 
+# Azure Container Apps terminates TLS at the ingress and forwards plain HTTP
+# to the container, so Django needs to trust the forwarded proto header to
+# know the original request was HTTPS (otherwise CSRF's origin check compares
+# "https://" from the browser against "http://" and rejects every login).
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+USE_X_FORWARDED_HOST = True
+CSRF_TRUSTED_ORIGINS = [f"https://{host}" for host in ALLOWED_HOSTS if host]
+
 
 # ---------------------------------------------------------
 # Installed Apps
